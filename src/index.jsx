@@ -1,19 +1,22 @@
-import React from 'react';
-import ReactDom from 'react-dom';
-import MainView from './components/main-view/main-view';
+import React from "react";
+import ReactDom from "react-dom";
 
 // Import statement to indicate that I need to bundle. `./index.scss`
-import './index.scss';
+import './index.scss'
 
 // Main component (will eventually use all the others)
-class mequalApplication extends React.Component {
-        render() {
-                return <MainView />;
-        }
+class mequalApplication extends React.Component{
+    render(){
+        return (
+            <div className="mequal">
+                <div>Good morning</div>
+            </div>
+        )
+    }
 }
 
 // Finds the root of my app
 const container = document.getElementsByClassName('app-container')[0];
 
 // Tells React to render my app in the root DOM element
-ReactDom.render(React.createElement(mequalApplication), container);
+ReactDom.render(React.createElement(mequalApplication), container)
