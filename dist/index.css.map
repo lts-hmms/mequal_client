@@ -1,1 +1,0 @@
-{"mappings":"AAEA","sources":["src/index.scss"],"sourcesContent":["$color: lightpink;\n\n.mequal {\n  color: $color;\n}\n"],"names":[],"version":3,"file":"index.css.map","sourceRoot":"/__parcel_source_root/"}
