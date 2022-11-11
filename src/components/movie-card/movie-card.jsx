@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 
 export class MovieCard extends React.Component {
         render() {
-                <button type="button">Registration</button>;
-
                 const { movieData, onMovieClick } = this.props;
                 return (
                         <div

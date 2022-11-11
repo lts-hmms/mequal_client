@@ -52,6 +52,9 @@ export class MainView extends React.Component {
 
                 return (
                         <div className="main-view">
+                                <div className="button">
+                                        <button>Register</button>
+                                </div>
                                 {/* If the state of `selectedMovie`is not null, than selected movie will be returned, otherwise all movies will be returned */}
                                 {selectedMovie ? (
                                         <MovieView
