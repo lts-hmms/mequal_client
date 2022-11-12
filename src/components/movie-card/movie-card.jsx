@@ -1,19 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Badge, Container } from 'react-bootstrap';
 
 export class MovieCard extends React.Component {
         render() {
                 const { movieData, onMovieClick } = this.props;
                 return (
                         <Card>
-                                <Card.Img variant="top" src={movieData.ImageUrl} />
-                                <Card.Body>
-                                        <Card.Title>{movieData.Title}</Card.Title>
-                                        <Card.Text>{movieData.Description}</Card.Text>
-                                        <Button onClick={() => onMovieClick(movieData)} variant="link">
-                                                Open
+                                <Card.Img className="movie-im" variant="top" src={movieData.ImageUrl} />
+                                <Card.Body className="cardbody text-center">
+                                        <Card.Text>
+                                                {movieData.Genres.map((genre) => (
+                                                        <Badge pill bg="light" text="dark">
+                                                                {genre.Name}
+                                                        </Badge>
+                                                ))}
+                                        </Card.Text>
+                                        <Card.Title className="movieTitle mt-4">{movieData.Title}</Card.Title>
+                                        <Card.Text>{movieData.Year}</Card.Text>
+                                        <Card.Text>
+                                                {movieData.Directors.map((director) => (
+                                                        <div>by {director.Name}</div>
+                                                ))}
+                                        </Card.Text>
+
+                                        <Button className="btn mt-2 justify-content-center" variant="dark">
+                                                +
                                         </Button>
+                                        {/* <Button onClick={() => onMovieClick(movieData)} variant="link">
+                                                Open
+                                        </Button> */}
                                 </Card.Body>
                         </Card>
                 );
