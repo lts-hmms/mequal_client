@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Container } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { RegistrationView } from '../registration-view/registration-view';
 
 export class MainView extends React.Component {
         constructor() {
@@ -42,16 +43,16 @@ export class MainView extends React.Component {
         }
 
         render() {
-                const { movies, selectedMovie } = this.state;
+                const { movies, selectedMovie, user } = this.state;
 
                 /* If there's no user, the LoginView is rendered. If there is a user logged in, the user details are passed as a prop to the LoginView */
-                /* if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />; */
+                if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
 
                 /* Before the movies have been loaded */
                 if (movies.length === 0) return <div className="main-view" />;
 
                 return (
-                        <Row className="main-view justify-content-md-center">
+                        <Row className="main-view justify-content-md-center mt-5">
                                 {/* <button>Register</button>  */}
 
                                 {/* If the state of `selectedMovie`is not null, than selected movie will be returned, otherwise all movies will be returned */}
@@ -65,17 +66,29 @@ export class MainView extends React.Component {
                                                 />
                                         </Col>
                                 ) : (
-                                        movies.map((movie) => (
-                                                <Col md={3}>
-                                                        <MovieCard
-                                                                key={movie._id}
-                                                                movieData={movie}
-                                                                onMovieClick={(newSelectedMovie) => {
-                                                                        this.setSelectedMovie(newSelectedMovie);
-                                                                }}
-                                                        />
-                                                </Col>
-                                        ))
+                                        <Container>
+                                                <Row className="row">
+                                                        <h1 className="display-1 text-center">mequal</h1>
+
+                                                        {movies.map((movie) => (
+                                                                <Col md={4}>
+                                                                        <div className="movie-cards mt-5">
+                                                                                <MovieCard
+                                                                                        key={movie._id}
+                                                                                        movieData={movie}
+                                                                                        onMovieClick={(
+                                                                                                newSelectedMovie
+                                                                                        ) => {
+                                                                                                this.setSelectedMovie(
+                                                                                                        newSelectedMovie
+                                                                                                );
+                                                                                        }}
+                                                                                />
+                                                                        </div>
+                                                                </Col>
+                                                        ))}
+                                                </Row>
+                                        </Container>
                                 )}
                         </Row>
                 );
