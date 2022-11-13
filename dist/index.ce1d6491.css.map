@@ -1,1 +1,1 @@
-{"mappings":"","sources":["src/index.scss"],"sourcesContent":[null],"names":[],"version":3,"file":"index.ce1d6491.css.map","sourceRoot":"/__parcel_source_root/"}
+{"mappings":"AAAA","sources":["src/index.scss"],"sourcesContent":["@font-face {\n  font-family: \"Source Code Pro Light\";\n  src: local(\"Source Code Pro Light\"),\n    url(\"./fonts/Source_Code_Pro/SourceCodePro-Light.ttf\");\n}\n"],"names":[],"version":3,"file":"index.ce1d6491.css.map","sourceRoot":"/__parcel_source_root/"}
