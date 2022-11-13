@@ -4,7 +4,8 @@ import { Row, Col, Container } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
-import { RegistrationView } from '../registration-view/registration-view';
+import { NavbarView } from '../navbar/navbar';
+import mequalLogo from '../mequalLogo.png';
 
 export class MainView extends React.Component {
         constructor() {
@@ -52,24 +53,33 @@ export class MainView extends React.Component {
                 if (movies.length === 0) return <div className="main-view" />;
 
                 return (
-                        <Row className="main-view justify-content-md-center mt-5">
-                                {/* <button>Register</button>  */}
-
+                        <div>
+                                <NavbarView />
                                 {/* If the state of `selectedMovie`is not null, than selected movie will be returned, otherwise all movies will be returned */}
                                 {selectedMovie ? (
-                                        <Col md={8}>
-                                                <MovieView
-                                                        movie={selectedMovie}
-                                                        onBackClick={(newSelectedMovie) => {
-                                                                this.setSelectedMovie(newSelectedMovie);
-                                                        }}
-                                                />
-                                        </Col>
+                                        <Container>
+                                                <Row>
+                                                        <MovieView
+                                                                movie={selectedMovie}
+                                                                onBackClick={(newSelectedMovie) => {
+                                                                        this.setSelectedMovie(newSelectedMovie);
+                                                                }}
+                                                        />
+                                                </Row>
+                                        </Container>
                                 ) : (
                                         <Container>
+                                                <Row className="row justify-content-center mt-5">
+                                                        <Col md={3}>
+                                                                <img
+                                                                        className="logo "
+                                                                        src={mequalLogo}
+                                                                        alt="mequal logo"
+                                                                        style={{ width: '100%' }}
+                                                                />
+                                                        </Col>
+                                                </Row>
                                                 <Row className="row">
-                                                        <h1 className="display-1 text-center">mequal</h1>
-
                                                         {movies.map((movie) => (
                                                                 <Col md={4}>
                                                                         <div className="movie-cards mt-5">
@@ -90,7 +100,7 @@ export class MainView extends React.Component {
                                                 </Row>
                                         </Container>
                                 )}
-                        </Row>
+                        </div>
                 );
         }
 }
