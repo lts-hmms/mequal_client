@@ -21,5 +21,5 @@ The client-side for an application called &quot;mequal&quot; based on its existi
 	<li>Follow these steps to clone the repository:&nbsp;<a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository">https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository</a></li>
 	<li>Into the Terminal: navigate to the projects directory</li>
 	<li>Into the Terminal run:&nbsp;<span style="font-family:Courier New,Courier,monospace"><code>npx&nbsp;parcel src/index.html</code></span></li>
-	<li>To see the website in the browser, open browser and load http://<code>localhost:1234</code></li>
+	<li>To see the website in the browser, open browser and load <code>http://localhost:1234</code></li>
 </ol>
