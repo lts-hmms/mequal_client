@@ -10,9 +10,9 @@ import './index.scss';
 class mequalApplication extends React.Component {
         render() {
                 return (
-                        <Container>
+                        <div>
                                 <MainView />
-                        </Container>
+                        </div>
                 );
         }
 }
