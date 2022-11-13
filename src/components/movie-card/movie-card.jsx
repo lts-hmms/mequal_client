@@ -7,7 +7,12 @@ export class MovieCard extends React.Component {
                 const { movieData, onMovieClick } = this.props;
                 return (
                         <Card>
-                                <Card.Img className="movie-im" variant="top" src={movieData.ImageUrl} />
+                                <Card.Img
+                                        className="movie-im"
+                                        variant="link"
+                                        src={movieData.ImageUrl}
+                                        onClick={() => onMovieClick(movieData)}
+                                />
                                 <Card.Body className="cardbody text-center">
                                         <Card.Text>
                                                 {movieData.Genres.map((genre) => (
@@ -16,7 +21,9 @@ export class MovieCard extends React.Component {
                                                         </Badge>
                                                 ))}
                                         </Card.Text>
-                                        <Card.Title className="movieTitle mt-4">{movieData.Title}</Card.Title>
+                                        <Card.Title className="movieTitle mt-4" onClick={() => onMovieClick(movieData)}>
+                                                {movieData.Title}
+                                        </Card.Title>
                                         <Card.Text>{movieData.Year}</Card.Text>
                                         <Card.Text>
                                                 {movieData.Directors.map((director) => (
@@ -27,9 +34,6 @@ export class MovieCard extends React.Component {
                                         <Button className="btn mt-2 justify-content-center" variant="dark">
                                                 +
                                         </Button>
-                                        {/* <Button onClick={() => onMovieClick(movieData)} variant="link">
-                                                Open
-                                        </Button> */}
                                 </Card.Body>
                         </Card>
                 );
