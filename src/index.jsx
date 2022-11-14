@@ -8,7 +8,11 @@ import './index.scss';
 // Main component (will eventually use all the others)
 class mequalApplication extends React.Component {
         render() {
-                return <MainView />;
+                return (
+                        <div>
+                                <MainView />
+                        </div>
+                );
         }
 }
 

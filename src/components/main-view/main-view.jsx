@@ -1,9 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import { RegistrationView } from '../registration-view/registration-view';
+import { Row, Col, Container } from 'react-bootstrap';
 import { LoginView } from '../login-view/login-view';
 import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
+import { NavbarView } from '../navbar/navbar';
+import mequalLogo from '../mequalLogo.png';
 
 export class MainView extends React.Component {
         constructor() {
@@ -42,37 +44,61 @@ export class MainView extends React.Component {
         }
 
         render() {
-                const { movies, selectedMovie } = this.state;
+                const { movies, selectedMovie, user } = this.state;
 
                 /* If there's no user, the LoginView is rendered. If there is a user logged in, the user details are passed as a prop to the LoginView */
-                // if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
+                if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
 
                 /* Before the movies have been loaded */
                 if (movies.length === 0) return <div className="main-view" />;
 
                 return (
-                        <div className="main-view">
-                                <div className="button">
-                                        <button>Register</button>
-                                </div>
+                        <div>
+                                <NavbarView />
                                 {/* If the state of `selectedMovie`is not null, than selected movie will be returned, otherwise all movies will be returned */}
                                 {selectedMovie ? (
-                                        <MovieView
-                                                movie={selectedMovie}
-                                                onBackClick={(newSelectedMovie) => {
-                                                        this.setSelectedMovie(newSelectedMovie);
-                                                }}
-                                        />
+                                        <Container>
+                                                <Row>
+                                                        <MovieView
+                                                                movie={selectedMovie}
+                                                                onBackClick={(newSelectedMovie) => {
+                                                                        this.setSelectedMovie(newSelectedMovie);
+                                                                }}
+                                                        />
+                                                </Row>
+                                        </Container>
                                 ) : (
-                                        movies.map((movie) => (
-                                                <MovieCard
-                                                        key={movie._id}
-                                                        movieData={movie}
-                                                        onMovieClick={(newSelectedMovie) => {
-                                                                this.setSelectedMovie(newSelectedMovie);
-                                                        }}
-                                                />
-                                        ))
+                                        <Container>
+                                                <Row className="row justify-content-center mt-5">
+                                                        <Col md={3}>
+                                                                <img
+                                                                        className="logo "
+                                                                        src={mequalLogo}
+                                                                        alt="mequal logo"
+                                                                        style={{ width: '100%' }}
+                                                                />
+                                                        </Col>
+                                                </Row>
+                                                <Row className="row">
+                                                        {movies.map((movie) => (
+                                                                <Col md={4}>
+                                                                        <div className="movie-cards mt-5">
+                                                                                <MovieCard
+                                                                                        key={movie._id}
+                                                                                        movieData={movie}
+                                                                                        onMovieClick={(
+                                                                                                newSelectedMovie
+                                                                                        ) => {
+                                                                                                this.setSelectedMovie(
+                                                                                                        newSelectedMovie
+                                                                                                );
+                                                                                        }}
+                                                                                />
+                                                                        </div>
+                                                                </Col>
+                                                        ))}
+                                                </Row>
+                                        </Container>
                                 )}
                         </div>
                 );
