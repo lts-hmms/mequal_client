@@ -6,6 +6,7 @@ import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { NavbarView } from '../navbar/navbar';
 import mequalLogo from '../mequalLogo.png';
+import './main-view.scss';
 
 export class MainView extends React.Component {
         constructor() {
@@ -60,6 +61,7 @@ export class MainView extends React.Component {
                                         <Container>
                                                 <Row>
                                                         <MovieView
+                                                                className="movie-view"
                                                                 movie={selectedMovie}
                                                                 onBackClick={(newSelectedMovie) => {
                                                                         this.setSelectedMovie(newSelectedMovie);
@@ -81,10 +83,9 @@ export class MainView extends React.Component {
                                                 </Row>
                                                 <Row className="row">
                                                         {movies.map((movie) => (
-                                                                <Col md={4}>
+                                                                <Col md={4} key={movie._id}>
                                                                         <div className="movie-cards mt-5">
                                                                                 <MovieCard
-                                                                                        key={movie._id}
                                                                                         movieData={movie}
                                                                                         onMovieClick={(
                                                                                                 newSelectedMovie
