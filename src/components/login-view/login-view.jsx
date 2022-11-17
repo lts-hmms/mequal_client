@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export function LoginView(props) {
@@ -53,50 +54,54 @@ export function LoginView(props) {
   };
 
   return (
-    <div className="Login mt-5">
-      <h1 className="display-1 text-center">Login</h1>
-      <div>
-        <h6 className="text-center">
-          Not yet registered?
-          <div className="btn-link justify-content-center">Subscribe</div>
-        </h6>
-      </div>
-      <div className="row justify-content-center mt-5">
-        <Col md={8} lg={6}>
-          <Form>
-            <Form.Group controlId="formUsername">
-              <Form.Label />
-              <Form.Control
-                type="text"
-                placeholder="Enter username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              {/* display validation error */}
-              {usernameErr && <p>{usernameErr}</p>}
-            </Form.Group>
-            <Form.Group controlId="formPassword">
-              <Form.Label />
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              {passwordErr && <p>{passwordErr}</p>}
-            </Form.Group>
-            <Col>
-              <Button
-                className="btn mt-3"
-                variant="dark"
-                type="submit"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
-            </Col>
-          </Form>
-        </Col>
+    <div>
+      <div className="Login mt-5">
+        <h1 className="display-1 text-center">Login</h1>
+        <div>
+          <h6 className="text-center">
+            Not yet registered?
+            <Link to="/register">
+              <div className="btn-link justify-content-center">Subscribe</div>
+            </Link>
+          </h6>
+        </div>
+        <div className="row justify-content-center mt-5">
+          <Col md={8} lg={6}>
+            <Form>
+              <Form.Group controlId="formUsername">
+                <Form.Label />
+                <Form.Control
+                  type="text"
+                  placeholder="Enter username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                {/* display validation error */}
+                {usernameErr && <p>{usernameErr}</p>}
+              </Form.Group>
+              <Form.Group controlId="formPassword">
+                <Form.Label />
+                <Form.Control
+                  type="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                {passwordErr && <p>{passwordErr}</p>}
+              </Form.Group>
+              <Col>
+                <Button
+                  className="btn mt-3"
+                  variant="dark"
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  Submit
+                </Button>
+              </Col>
+            </Form>
+          </Col>
+        </div>
       </div>
     </div>
   );
