@@ -61,6 +61,7 @@ export function RegistrationView(props) {
         .then((response) => {
           const { data } = response;
           console.log(data);
+          alert('Successfully registered.');
           window.open('/', '_self');
         })
         .catch((e) => {
