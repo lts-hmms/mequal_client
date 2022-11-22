@@ -49,6 +49,7 @@ export function LoginView(props) {
         })
         .catch((e) => {
           console.log('no such user');
+          alert('Username or Password is incorrect. Please try again.');
         });
     }
   };
