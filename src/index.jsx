@@ -7,13 +7,13 @@ import './index.scss';
 
 // Main component (will eventually use all the others)
 class mequalApplication extends React.Component {
-    render() {
-        return (
-            <div>
-                <MainView />
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <MainView />
+      </div>
+    );
+  }
 }
 
 // Finds the root of my app
