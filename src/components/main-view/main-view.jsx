@@ -123,22 +123,51 @@ export class MainView extends React.Component {
       });
   }
 
-  addToFavs(e) {
-    const { movie } = this.props;
+  handleFavs = (movieId, action) => {
+    const { user, Favslist } = this.state;
     const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    e.preventDefault();
-    axios
-      .post(`https://mequal.herokuapp.com/users/${user}/movies/${movieId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        alert(`Movie added to your Favs <3`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
+    if (token !== null && user !== null) {
+      // Add MovieId to Favs (local state & server)
+      if (action === '💜') {
+        this.setState({ favs: [...Favslist, movieId] });
+        axios
+          .post(
+            `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then((res) => {
+            console.log(`Movie added to ${user} favorite movies`);
+            alert(`Movie added to your favs <3`);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+
+        // Remove MovieId from Favorites (local state & server)
+      } else if (action === '⛔️') {
+        this.setState({
+          favs: Favslist.filter((id) => id !== movieId),
+        });
+        axios
+          .delete(
+            `https://mequal.herokuapp.com/users/${user}/movies/${movieId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+          .then((res) => {
+            console.log(`Movie removed from ${user} favorite movies`);
+            alert(`Movie removed from your favs!`);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    }
+  };
 
   render() {
     const { movies, genres, directors, user, Favslist } = this.state;
@@ -165,11 +194,7 @@ export class MainView extends React.Component {
                 return movies.map((m) => (
                   <Col md={4} key={m._id}>
                     <div className="movie-cards mt-5">
-                      <MovieCard
-                        movieData={m}
-                        genreData={genres}
-                        directorData={directors}
-                      />
+                      <MovieCard movieData={m} />
                     </div>
                   </Col>
                 ));
@@ -187,7 +212,10 @@ export class MainView extends React.Component {
                       return res.map((m) => (
                         <Col md={4} key={m._id}>
                           <div className="movie-cards mt-5">
-                            <MovieCard movieData={m} />
+                            <MovieCard
+                              movieData={m}
+                              handleFavs={this.handleFavs}
+                            />
                           </div>
                         </Col>
                       ));
@@ -211,15 +239,21 @@ export class MainView extends React.Component {
             {/* profile */}
             <Route
               path="/users/:user/profile"
-              render={({ history }) => (
-                // not working for now
-                // if (!user) return <Redirect to="/" />;
-                <Container>
-                  <Col>
-                    <ProfileView user={user} movies={movies} />
-                  </Col>
-                </Container>
-              )}
+              render={() => {
+                if (!user)
+                  return (
+                    <Col>
+                      <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                    </Col>
+                  );
+                return (
+                  <Container>
+                    <Col>
+                      <ProfileView user={user} movies={movies} />
+                    </Col>
+                  </Container>
+                );
+              }}
             />
             {/* certain movie */}
             <Route
