@@ -179,7 +179,7 @@ export class ProfileView extends React.Component {
           </Row>
         </div>
 
-        <div className="Favslist row justify-content-center mt-5">
+        {/* <div className="Favslist row justify-content-center mt-5">
           {Favslist.map((m) => {
             const res = movies.filter((movie) => movie._id === m._id);
             if (res.length > 0) {
@@ -192,7 +192,7 @@ export class ProfileView extends React.Component {
               ));
             }
           })}
-        </div>
+        </div> */}
       </div>
     );
   }
