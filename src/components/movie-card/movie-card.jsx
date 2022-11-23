@@ -3,23 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, Card, Badge, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { FavsButton } from '../favs-button/favs-button';
 
 export class MovieCard extends React.Component {
-  addToFavs(movieId) {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    axios
-      .post(`https://mequal.herokuapp.com/users/${user}/movies/${movieId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        alert(`Movie added to your favs <3`);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   render() {
     const { movieData, genreData } = this.props;
 
@@ -56,14 +42,7 @@ export class MovieCard extends React.Component {
                   </Link>
                 ))}
               </Card.Text>
-
-              <Button
-                onClick={this.addToFavs}
-                className="btn mt-2 justify-content-center"
-                variant="dark"
-              >
-                +
-              </Button>
+              <FavsButton onClick={() => this.handleFavs} />
             </Card.Body>
           </Card>
         </Row>
