@@ -23,8 +23,12 @@ export function NavbarView({ user }) {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          {isAuth() && <Nav.Link href={`/users/${user}`}>{user}</Nav.Link>}
+          {isAuth() && (
+            <Nav.Link href={`/users/${user}/profile`}>{user}</Nav.Link>
+          )}
+          {isAuth() && <Nav.Link href={`/users/${user}/favs`}>Favs</Nav.Link>}
           {isAuth() && <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>}
+
           {!isAuth() && <Nav.Link href="/">Sign-in</Nav.Link>}
           {!isAuth() && <Nav.Link href="/register">Sign-up</Nav.Link>}
         </Nav>
