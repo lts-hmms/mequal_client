@@ -2,10 +2,26 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Card, Badge, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 export class MovieCard extends React.Component {
+  addToFavs(movieId) {
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    axios
+      .post(`https://mequal.herokuapp.com/users/${user}/movies/${movieId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        alert(`Movie added to your favs <3`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   render() {
-    const { movieData } = this.props;
+    const { movieData, genreData } = this.props;
 
     return (
       <Container>
@@ -16,12 +32,13 @@ export class MovieCard extends React.Component {
                 className="movie-im"
                 variant="top"
                 src={movieData.ImageUrl}
+                alt="movieposter"
               />
             </Link>
             <Card.Body className="cardbody text-center">
               <Card.Text>
                 {movieData.Genres.map((genre) => (
-                  <Link to={`/genres/${movieData.Genres.Name}`}>
+                  <Link to={`/genres/${genre.Name}`}>
                     <Badge pill variant="link" bg="light" text="dark">
                       {genre.Name}
                     </Badge>
@@ -34,13 +51,14 @@ export class MovieCard extends React.Component {
               <Card.Text>{movieData.Year}</Card.Text>
               <Card.Text>
                 {movieData.Directors.map((director) => (
-                  <Link to={`/directors/${movieData.Directors.Name}`}>
+                  <Link to={`/directors/${director.Name}`}>
                     <div>by {director.Name}</div>
                   </Link>
                 ))}
               </Card.Text>
 
               <Button
+                onClick={this.addToFavs}
                 className="btn mt-2 justify-content-center"
                 variant="dark"
               >
@@ -65,5 +83,8 @@ MovieCard.propTypes = {
     Genres: PropTypes.array.isRequired,
     Actors: PropTypes.array.isRequired,
     Directors: PropTypes.array.isRequired,
+  }).isRequired,
+  genreData: PropTypes.shape({
+    Name: PropTypes.string.isRequired,
   }).isRequired,
 };
