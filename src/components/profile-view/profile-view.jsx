@@ -77,17 +77,16 @@ export class ProfileView extends React.Component {
     e.preventDefault();
     const username = localStorage.getItem('user');
     const token = localStorage.getItem('token');
+    const payload = Object.fromEntries(
+      Object.entries({
+        Email: this.state.Email,
+        Password: this.state.Password,
+      }).filter(([_, val]) => !!val)
+    );
     axios
-      .patch(
-        `https://mequal.herokuapp.com/users/${username}`,
-        {
-          Email: this.state.Email,
-          ...(this.Password ? { Password: this.state.Password } : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
+      .patch(`https://mequal.herokuapp.com/users/${username}`, payload, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {
         console.log('response', res);
         alert('Your profile is updated now.');
