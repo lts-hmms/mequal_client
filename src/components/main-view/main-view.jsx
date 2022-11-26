@@ -123,52 +123,6 @@ export class MainView extends React.Component {
       });
   }
 
-  handleFavs = (movieId, action) => {
-    const { user, Favslist } = this.state;
-    const token = localStorage.getItem('token');
-    if (token !== null && user !== null) {
-      // Add MovieId to Favs (local state & server)
-      if (action === '💜') {
-        this.setState({ favs: [...Favslist, movieId] });
-        axios
-          .post(
-            `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
-            {},
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            console.log(`Movie added to ${user} favorite movies`);
-            alert(`Movie added to your favs <3`);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-
-        // Remove MovieId from Favorites (local state & server)
-      } else if (action === '⛔️') {
-        this.setState({
-          favs: Favslist.filter((id) => id !== movieId),
-        });
-        axios
-          .delete(
-            `https://mequal.herokuapp.com/users/${user}/movies/${movieId}`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          )
-          .then((res) => {
-            console.log(`Movie removed from ${user} favorite movies`);
-            alert(`Movie removed from your favs!`);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    }
-  };
-
   render() {
     const { movies, genres, directors, user, Favslist } = this.state;
 
