@@ -1,8 +1,17 @@
+/* eslint-disable no-console */
 import React from 'react';
 import axios from 'axios';
+
+import { connect } from 'react-redux';
+
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import { Row, Col, Container, Img } from 'react-bootstrap';
+// #0
+import { setMovies, setUser } from '../../actions/actions';
+import MoviesList from '../movies-list/movies-list';
+
+// #1
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
 import { MovieCard } from '../movie-card/movie-card';
@@ -10,53 +19,39 @@ import { MovieView } from '../movie-view/movie-view';
 import { NavbarView } from '../navbar/navbar';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
-import { ProfileView } from '../profile-view/profile-view';
+import ProfileView from '../profile-view/profile-view';
 
 // import mequalLogo from '../mequalLogo.png';
 import './main-view.scss';
 
-export class MainView extends React.Component {
+// #2
+class MainView extends React.Component {
   constructor(props) {
     // 'registers' class MainView as a React Component
     super(props);
+
     // initializing state with starting values
-    this.state = {
-      movies: [],
-      user: null,
-      genres: [],
-      directors: [],
-      Favslist: [],
-    };
+    // #3
+    // this.state = {
+    //   // movies: [],
+    //   // user: null,
+    //   genres: [],
+    //   directors: [],
+    //   // Favslist: [],
+    // };
   }
 
   /* retrieves information from local storage and checks if user is logged in, if yes GET request is made to movies endpoint by calling getMovies method */
   componentDidMount() {
     const accessToken = localStorage.getItem('token');
     if (accessToken !== null) {
-      this.setState({
-        user: localStorage.getItem('user'),
-      });
+      console.log('access reached');
       this.getMovies(accessToken);
       this.getUser(accessToken);
+      // this.setFavorite(accessToken);
       this.getGenres(accessToken);
       this.getDirectors(accessToken);
     }
-  }
-
-  /* When a user successfully logs in, this function updates the `user` property in state and main-view is rendered again */
-  /* authentication data is saved to localStorage */
-  onLoggedIn(authData) {
-    console.log(authData);
-    this.setState({
-      user: authData.user.Username,
-    });
-
-    localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.Username);
-    /* the moment a user logs in, GET request to 'movies endpoint */
-    this.getMovies(authData.token);
-    this.getGenres(authData.token);
-    this.getDirectors(authData.token);
   }
 
   getMovies(token) {
@@ -67,9 +62,11 @@ export class MainView extends React.Component {
       .then((response) => {
         // Assign the result of the state
 
-        this.setState({
-          movies: response.data,
-        });
+        // before redux:
+        // this.setState({movies: response.data,});
+        // with redux:
+        // #4
+        this.props.setMovies(response.data);
       })
       .catch((error) => {
         console.log(error);
@@ -84,13 +81,28 @@ export class MainView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        this.setState({
-          Favslist: res.data.Favslist,
-        });
+        // this.setState({
+        // res.data.Favslist,
+        //   });
+        this.props.setUser(res.data);
       })
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
+  /* authentication data is saved to localStorage */
+  onLoggedIn(authData) {
+    console.log(authData);
+    this.props.setUser(authData.user);
+    // or?: this.props.setUser(authData.user);
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('user', authData.user.Username);
+    /* the moment a user logs in, GET request to 'movies endpoint */
+    this.getMovies(authData.token);
+    this.getGenres(authData.token);
+    this.getDirectors(authData.token);
   }
 
   getGenres(token) {
@@ -124,11 +136,15 @@ export class MainView extends React.Component {
   }
 
   render() {
-    const { movies, genres, directors, user, Favslist } = this.state;
+    // with redux: movies is extracted from this.props rather than from the this.state
+    // #5
+    const { movies, user, toggleFavs } = this.props;
+    // const { genres, directors } = this.state;
+    const username = user.Username;
 
     return (
       <Router>
-        <NavbarView user={user} />
+        <NavbarView username={username} />
         <Container>
           {/* <Row>
             <Img src="./mequalLogo.png" />
@@ -138,20 +154,28 @@ export class MainView extends React.Component {
               exact
               path="/"
               render={() => {
-                if (!user)
+                if (movies.length === 0 && localStorage.getItem('user'))
+                  return <div className="main-view" />;
+                if (!username)
                   return (
                     <Col>
-                      <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                      <LoginView
+                        onLoggedIn={(username) => this.onLoggedIn(username)}
+                      />
                     </Col>
                   );
-                if (movies.length === 0) return <div className="main-view" />;
-                return movies.map((m) => (
-                  <Col md={4} key={m._id}>
-                    <div className="movie-cards mt-5">
-                      <MovieCard movieData={m} />
-                    </div>
-                  </Col>
-                ));
+
+                // before redux:
+                // movies.map((m) => (
+                //   <Col md={4} key={m._id}>
+                //     <div className="movie-cards mt-5">
+                //       <MovieCard movieData={m} />
+                //     </div>
+                //   </Col>
+                // ));
+                // with redux:
+                // #6
+                return <MoviesList movies={movies} toggleFavs={toggleFavs} />;
               }}
             />
             {/* Favorites */}
@@ -280,5 +304,11 @@ export class MainView extends React.Component {
     );
   }
 }
+// func allows comp (MainView) to subscribe to store updates, anytime store is updated, this func will be called
+// #7
+const mapStateToProps = (state) => ({ movies: state.movies, user: state.user });
 
-export default MainView;
+// Higher Order Comp: function that takes comp and returns new comp
+// {setMovies} is mapDispatchToProps
+// #8
+export default connect(mapStateToProps, { setMovies, setUser })(MainView);
