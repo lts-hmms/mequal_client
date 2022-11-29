@@ -8,7 +8,12 @@ import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import { Row, Col, Container, Img } from 'react-bootstrap';
 // #0
-import { setMovies, setUser } from '../../actions/actions';
+import {
+  setMovies,
+  setUser,
+  setGenres,
+  setDirectors,
+} from '../../actions/actions';
 import MoviesList from '../movies-list/movies-list';
 
 // #1
@@ -27,18 +32,7 @@ import './main-view.scss';
 // #2
 class MainView extends React.Component {
   constructor(props) {
-    // 'registers' class MainView as a React Component
     super(props);
-
-    // initializing state with starting values
-    // #3
-    // this.state = {
-    //   // movies: [],
-    //   // user: null,
-    //   genres: [],
-    //   directors: [],
-    //   // Favslist: [],
-    // };
   }
 
   /* retrieves information from local storage and checks if user is logged in, if yes GET request is made to movies endpoint by calling getMovies method */
@@ -96,7 +90,6 @@ class MainView extends React.Component {
   onLoggedIn(authData) {
     console.log(authData);
     this.props.setUser(authData.user);
-    // or?: this.props.setUser(authData.user);
     localStorage.setItem('token', authData.token);
     localStorage.setItem('user', authData.user.Username);
     /* the moment a user logs in, GET request to 'movies endpoint */
@@ -111,9 +104,7 @@ class MainView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        this.setState({
-          genres: res.data,
-        });
+        this.props.setGenres(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -126,9 +117,7 @@ class MainView extends React.Component {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        this.setState({
-          directors: res.data,
-        });
+        this.props.setDirectors(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -138,7 +127,7 @@ class MainView extends React.Component {
   render() {
     // with redux: movies is extracted from this.props rather than from the this.state
     // #5
-    const { movies, user, toggleFavs } = this.props;
+    const { movies, user, toggleFavs, genres, directors } = this.props;
     // const { genres, directors } = this.state;
     const username = user.Username;
 
@@ -218,7 +207,7 @@ class MainView extends React.Component {
             <Route
               path="/users/:user/profile"
               render={() => {
-                if (!user)
+                if (!username)
                   return (
                     <Col>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -237,7 +226,7 @@ class MainView extends React.Component {
             <Route
               path="/movies/:movieId"
               render={({ match, history }) => {
-                if (!user)
+                if (!username)
                   return (
                     <Col>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -256,7 +245,7 @@ class MainView extends React.Component {
             <Route
               path="/directors/:directorName"
               render={({ match, history }) => {
-                if (!user)
+                if (!username)
                   return (
                     <Col>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -279,7 +268,7 @@ class MainView extends React.Component {
             <Route
               path="/genres/:genreName"
               render={({ match, history }) => {
-                if (!user)
+                if (!username)
                   return (
                     <Col>
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
@@ -306,9 +295,19 @@ class MainView extends React.Component {
 }
 // func allows comp (MainView) to subscribe to store updates, anytime store is updated, this func will be called
 // #7
-const mapStateToProps = (state) => ({ movies: state.movies, user: state.user });
+const mapStateToProps = (state) => ({
+  movies: state.movies,
+  user: state.user,
+  genres: state.genres,
+  directors: state.directors,
+});
 
 // Higher Order Comp: function that takes comp and returns new comp
 // {setMovies} is mapDispatchToProps
 // #8
-export default connect(mapStateToProps, { setMovies, setUser })(MainView);
+export default connect(mapStateToProps, {
+  setMovies,
+  setUser,
+  setGenres,
+  setDirectors,
+})(MainView);

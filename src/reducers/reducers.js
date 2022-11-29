@@ -5,8 +5,11 @@ import { combineReducers } from 'redux';
 import {
   SET_FILTER,
   SET_MOVIES,
+  SET_GENRES,
+  SET_DIRECTORS,
   SET_USER,
   UPDATE_USER,
+  DELETE_USER,
   SET_FAVORITE,
   DELETE_FAVORITE,
 } from '../actions/actions';
@@ -35,6 +38,26 @@ const movies = (state = [], action) => {
   }
 };
 
+const genres = (state = [], action) => {
+  switch (action.type) {
+    case SET_GENRES:
+      console.log('SET_GENRES reducer reached');
+      return action.value;
+    default:
+      return state;
+  }
+};
+
+const directors = (state = [], action) => {
+  switch (action.type) {
+    case SET_DIRECTORS:
+      console.log('SET_DIRECTORS reducer reached');
+      return action.value;
+    default:
+      return state;
+  }
+};
+
 const user = (state = {}, action) => {
   switch (action.type) {
     case SET_USER:
@@ -43,6 +66,9 @@ const user = (state = {}, action) => {
     case UPDATE_USER:
       console.log('UPDATE_USER reducer reached');
       return { password: action.payload.password, email: action.payload.email };
+    case DELETE_USER:
+      console.log('DELETE_USER reducer reached');
+      return action.value;
     case SET_FAVORITE:
       console.log('SET_FAVORITE reducer reached');
       return {
@@ -64,6 +90,8 @@ const user = (state = {}, action) => {
 const moviesApp = combineReducers({
   visibilityFilter,
   movies,
+  genres,
+  directors,
   user,
 });
 
