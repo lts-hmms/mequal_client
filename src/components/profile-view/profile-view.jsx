@@ -7,7 +7,7 @@ import axios from 'axios';
 import Moment from 'react-moment';
 import { connect } from 'react-redux';
 import { MovieCard } from '../movie-card/movie-card';
-import { setUser, updateUser } from '../../actions/actions';
+import { deleteUser, setUser, updateUser } from '../../actions/actions';
 
 const mapStateToProps = (state) => ({
   user: state.user,
@@ -63,6 +63,7 @@ function ProfileView(props) {
         localStorage.removeItem('user');
         localStorage.removeItem('token');
         alert('Profile has been deleted.');
+        deleteUser({});
         window.open('/', '_self');
       })
       .catch((e) => {
@@ -105,17 +106,6 @@ function ProfileView(props) {
   const handleChangePW = (event) => {
     this.setState({ Password: event.target.value });
   };
-
-  // render() {
-  //   const { Birthday } = this.state;
-  //   // const { movies } = this.props;
-  //   // const { user } = this.props;
-  //   const user = this.props;
-  //   const { Email } = this.state;
-  //   const { Password } = this.state;
-  //   const { Favslist } = this.state;
-  //   const FavsIds = Favslist.map((movie, key) => movie._id);
-  //   const favsIds = [];
 
   return (
     <div className="Profile mt-5">
@@ -170,27 +160,12 @@ function ProfileView(props) {
         <Row className="mt-5">
           <Link
             className="h6 text-center btn-link justify-content-center"
-            onClick={this.deleteProfile}
+            onClick={deleteProfile}
           >
             Delete profile
           </Link>
         </Row>
       </div>
-
-      {/* <div className="Favslist row justify-content-center mt-5">
-          {Favslist.map((m) => {
-            const res = movies.filter((movie) => movie._id === m._id);
-            if (res.length > 0) {
-              return res.map((m) => (
-                <Col md={4} key={m._id}>
-                  <div className="movie-cards mt-5">
-                    <MovieCard movieData={m} />
-                  </div>
-                </Col>
-              ));
-            }
-          })}
-        </div> */}
     </div>
   );
 }
