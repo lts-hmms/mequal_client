@@ -1,36 +1,28 @@
-/* eslint-disable no-console */
 import React from 'react';
 import axios from 'axios';
-
 import { connect } from 'react-redux';
-
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-
-import { Row, Col, Container, Img } from 'react-bootstrap';
-// #0
+import { Row, Col, Container } from 'react-bootstrap';
 import {
   setMovies,
   setUser,
   setGenres,
   setDirectors,
 } from '../../actions/actions';
-import MoviesList from '../movies-list/movies-list';
 
-// #1
+import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
 import { RegistrationView } from '../registration-view/registration-view';
-import { MovieCard } from '../movie-card/movie-card';
 import { MovieView } from '../movie-view/movie-view';
 import { NavbarView } from '../navbar/navbar';
 import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import ProfileView from '../profile-view/profile-view';
-
-// import mequalLogo from '../mequalLogo.png';
-import './main-view.scss';
 import FavsView from '../favs-view/favs-view';
+// import mequalLogo from '../mequalLogo.png';
 
-// #2
+import './main-view.scss';
+
 class MainView extends React.Component {
   constructor(props) {
     super(props);
@@ -41,49 +33,12 @@ class MainView extends React.Component {
     const accessToken = localStorage.getItem('token');
     if (accessToken !== null) {
       console.log('access reached');
-      this.getMovies(accessToken);
       this.getUser(accessToken);
+      this.getMovies(accessToken);
       // this.setFavorite(accessToken);
       this.getGenres(accessToken);
       this.getDirectors(accessToken);
     }
-  }
-
-  getMovies(token) {
-    axios
-      .get('https://mequal.herokuapp.com/movies', {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        // Assign the result of the state
-
-        // before redux:
-        // this.setState({movies: response.data,});
-        // with redux:
-        // #4
-        this.props.setMovies(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  getUser() {
-    const token = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
-    axios
-      .get(`https://mequal.herokuapp.com/users/${username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        // this.setState({
-        // res.data.Favslist,
-        //   });
-        this.props.setUser(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
 
   /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
@@ -92,11 +47,40 @@ class MainView extends React.Component {
     console.log(authData);
     this.props.setUser(authData.user);
     localStorage.setItem('token', authData.token);
-    localStorage.setItem('user', authData.user.Username);
+    localStorage.setItem('username', authData.user.Username);
+
     /* the moment a user logs in, GET request to 'movies endpoint */
     this.getMovies(authData.token);
     this.getGenres(authData.token);
     this.getDirectors(authData.token);
+  }
+
+  getUser(token) {
+    // const token = localStorage.getItem('token');
+    const username = localStorage.getItem('user');
+    axios
+      .get(`https://mequal.herokuapp.com/users/${username}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        this.props.setUser(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  getMovies(token) {
+    axios
+      .get('https://mequal.herokuapp.com/movies', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        this.props.setMovies(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   getGenres(token) {
@@ -128,10 +112,9 @@ class MainView extends React.Component {
   render() {
     // with redux: movies is extracted from this.props rather than from the this.state
     // #5
-    const { movies, user, toggleFavs, genres, directors } = this.props;
-    // const { genres, directors } = this.state;
+    const { movies, user, genres, directors } = this.props;
     const username = user.Username;
-    const { Favslist } = user;
+    console.log(username);
 
     return (
       <Router>
@@ -145,8 +128,6 @@ class MainView extends React.Component {
               exact
               path="/"
               render={() => {
-                if (movies.length === 0 && localStorage.getItem('user'))
-                  return <div className="main-view" />;
                 if (!username)
                   return (
                     <Col>
@@ -155,18 +136,8 @@ class MainView extends React.Component {
                       />
                     </Col>
                   );
-
-                // before redux:
-                // movies.map((m) => (
-                //   <Col md={4} key={m._id}>
-                //     <div className="movie-cards mt-5">
-                //       <MovieCard movieData={m} />
-                //     </div>
-                //   </Col>
-                // ));
-                // with redux:
-                // #6
-                return <MoviesList movies={movies} toggleFavs={toggleFavs} />;
+                if (movies.length === 0) return <div className="main-view" />;
+                return <MoviesList movies={movies} />;
               }}
             />
             {/* Favorites */}
@@ -179,7 +150,6 @@ class MainView extends React.Component {
                       <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
                     </Col>
                   );
-
                 return (
                   <Col>
                     <FavsView user={user} movies={movies} />
@@ -191,7 +161,7 @@ class MainView extends React.Component {
             <Route
               path="/register"
               render={() => {
-                if (user) return <Redirect to="/" />;
+                if (username) return <Redirect to="/" />;
                 return (
                   <Col>
                     <RegistrationView />
@@ -292,8 +262,8 @@ class MainView extends React.Component {
 // func allows comp (MainView) to subscribe to store updates, anytime store is updated, this func will be called
 // #7
 const mapStateToProps = (state) => ({
-  movies: state.movies,
   user: state.user,
+  movies: state.movies,
   genres: state.genres,
   directors: state.directors,
 });
@@ -302,8 +272,8 @@ const mapStateToProps = (state) => ({
 // {setMovies} is mapDispatchToProps
 // #8
 export default connect(mapStateToProps, {
-  setMovies,
   setUser,
+  setMovies,
   setGenres,
   setDirectors,
 })(MainView);
