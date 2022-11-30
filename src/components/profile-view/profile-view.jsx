@@ -39,12 +39,6 @@ function ProfileView(props) {
       })
       .then((res) => {
         this.props.setUser(res.data);
-        // this.setState({
-        //   Password: res.data.Password,
-        //   Email: res.data.Email,
-        //   Birthday: res.data.Birthday,
-        //   Favslist: res.data.Favslist,
-        // });
       })
       .catch((error) => {
         console.log(error);
