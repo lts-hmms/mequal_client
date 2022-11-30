@@ -1,14 +1,6 @@
 import React from 'react';
 import { Container, Nav, Navbar, Form } from 'react-bootstrap';
 
-// import { VisibilityFilterInput } from '../visibility-filter-input/visibility-filter-input';
-
-// const mapStateToProps = (state) => {
-//   {
-//     visibilityFilter;
-//   }
-// };
-
 export function NavbarView({ username }) {
   const onLoggedOut = () => {
     localStorage.clear();
@@ -25,7 +17,6 @@ export function NavbarView({ username }) {
     return false;
   };
 
-  // const visibilityFilter = this.props;
   return (
     <Navbar bg="dark" variant="dark" expand="lg">
       <Container>
@@ -41,17 +32,7 @@ export function NavbarView({ username }) {
             {isAuth() && (
               <Nav.Link href={`/users/${username}/favs`}>Favs</Nav.Link>
             )}
-            {isAuth() && (
-              <Form className="d-flex">
-                {/* <VisibilityFilterInput visibilityFilter={visibilityFilter} /> */}
-                <Form.Control
-                  type="search"
-                  placeholder="Search"
-                  className="me-2"
-                  aria-label="Search"
-                />
-              </Form>
-            )}
+
             {isAuth() && <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>}
 
             {!isAuth() && <Nav.Link href="/">Sign-in</Nav.Link>}
@@ -64,6 +45,3 @@ export function NavbarView({ username }) {
 }
 
 export default NavbarView;
-// export default connect(mapStateToProps)(NavbarView);
-
-// export default connect(mapStateToProps, { setMovies } )(MainView);
