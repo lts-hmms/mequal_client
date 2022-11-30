@@ -24,9 +24,8 @@ function FavsButton(props) {
           }
         )
         .then((res) => {
-          console.log(`Movie removed from ${username} favorite movies`);
-          alert(`Movie removed from your favs!`);
           props.deleteFavorite(movieId);
+          alert(`Movie removed from your favs!`);
         })
         .catch((error) => {
           console.log(error);
@@ -43,9 +42,8 @@ function FavsButton(props) {
           }
         )
         .then((res) => {
-          console.log(`Movie added to ${username} favorite movies`);
-          alert(`Movie added to your Favs <3`);
           props.setFavorite(movieId);
+          alert(`Movie added to your Favs <3`);
         })
         .catch((error) => {
           console.log(error);
@@ -57,7 +55,7 @@ function FavsButton(props) {
     <Button
       className="favs-button btn mt-2 justify-content-center"
       variant="dark"
-      onClick={() => toggleFavs(props.movie._id)}
+      onClick={() => toggleFavs(movie._id)}
     >
       {isFav ? '⛔️' : '💜'}
     </Button>
@@ -66,6 +64,7 @@ function FavsButton(props) {
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  toggleFavs: state.toggleFavs,
 });
 
 export default connect(mapStateToProps, { setFavorite, deleteFavorite })(
