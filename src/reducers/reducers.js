@@ -73,13 +73,15 @@ const user = (state = {}, action) => {
       console.log('SET_FAVORITE reducer reached');
       return {
         ...state,
-        Favslist: [action.value, ...state],
+        Favslist: [action.value, ...state.Favslist],
       };
     case DELETE_FAVORITE:
       console.log('DELETE_FAVORITE reducer reached');
       return {
         ...state,
-        Favslist: [...state.filter((movieId) => movieId !== action.value)],
+        Favslist: [
+          ...state.Favslist.filter((movieId) => movieId !== action.value),
+        ],
       };
     default:
       return state;
