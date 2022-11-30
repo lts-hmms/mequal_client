@@ -28,6 +28,7 @@ import ProfileView from '../profile-view/profile-view';
 
 // import mequalLogo from '../mequalLogo.png';
 import './main-view.scss';
+import FavsView from '../favs-view/favs-view';
 
 // #2
 class MainView extends React.Component {
@@ -130,6 +131,7 @@ class MainView extends React.Component {
     const { movies, user, toggleFavs, genres, directors } = this.props;
     // const { genres, directors } = this.state;
     const username = user.Username;
+    const { Favslist } = user;
 
     return (
       <Router>
@@ -170,26 +172,20 @@ class MainView extends React.Component {
             {/* Favorites */}
             <Route
               path="/users/:user/favs/"
-              render={() => (
-                <div className="Favslist row justify-content-center mt-5">
-                  <h1 className="display-1 text-center">Your Favs</h1>
-                  {Favslist.map((m) => {
-                    const res = movies.filter((movie) => movie._id === m._id);
-                    if (res.length > 0) {
-                      return res.map((m) => (
-                        <Col md={4} key={m._id}>
-                          <div className="movie-cards mt-5">
-                            <MovieCard
-                              movieData={m}
-                              handleFavs={this.handleFavs}
-                            />
-                          </div>
-                        </Col>
-                      ));
-                    }
-                  })}
-                </div>
-              )}
+              render={() => {
+                if (!username)
+                  return (
+                    <Col>
+                      <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                    </Col>
+                  );
+
+                return (
+                  <Col>
+                    <FavsView user={user} movies={movies} />
+                  </Col>
+                );
+              }}
             />
             {/* registration */}
             <Route
