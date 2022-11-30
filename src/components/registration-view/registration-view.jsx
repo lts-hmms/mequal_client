@@ -28,15 +28,15 @@ export function RegistrationView(props) {
     if (!password) {
       setPasswordErr('Password required');
       isReq = false;
-    } else if (password.length < 6) {
-      setPasswordErr('Give me at least 6 characters please');
+    } else if (password.length < 8) {
+      setPasswordErr('Give me at least 8 characters please');
       isReq = false;
     }
     if (!email) {
       setEmailErr('Email required');
       isReq = false;
-    } else if (email.indexOf('@') === -1 && email.indexOf('.') === -1) {
-      setEmailErr("This doesn't look like an email to me ");
+    } else if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+      setEmailErr("This doesn't look like an email ");
       isReq = false;
     }
     if (!birthday) {
@@ -66,6 +66,7 @@ export function RegistrationView(props) {
         })
         .catch((e) => {
           console.log('error registering user');
+          alert('I am sorry but this went wrong.');
         });
     }
   };
@@ -96,6 +97,7 @@ export function RegistrationView(props) {
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label />
+
               <Form.Control
                 type="password"
                 placeholder="Enter password"
@@ -103,6 +105,10 @@ export function RegistrationView(props) {
                 onChange={(e) => setPassword(e.target.value)}
               />
               {passwordErr && <p>{passwordErr}</p>}
+
+              <Form.Text className="text-muted">
+                Minimum of eight characters, at least one letter and one number.
+              </Form.Text>
             </Form.Group>
             <Form.Group controlId="formEmail">
               <Form.Label />
