@@ -24,7 +24,7 @@ function FavsButton(props) {
           }
         )
         .then((res) => {
-          console.log(`Movie removed from ${user} favorite movies`);
+          console.log(`Movie removed from ${username} favorite movies`);
           alert(`Movie removed from your favs!`);
           props.deleteFavorite(movieId);
         })
@@ -37,6 +37,7 @@ function FavsButton(props) {
       axios
         .post(
           `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+          {},
           {
             headers: { Authorization: `Bearer ${token}` },
           }
