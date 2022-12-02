@@ -46,28 +46,34 @@ export function RegistrationView(props) {
     return isReq;
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     const isReq = validate();
     if (isReq) {
       /* send a post request to the server */
-      axios
-        .post('https://mequal.herokuapp.com/users', {
-          Username: username,
-          Password: password,
-          Email: email,
-          Birthday: birthday,
-        })
-        .then((response) => {
-          const { data } = response;
-          console.log(data);
-          alert('Successfully registered.');
-          window.open('/', '_self');
-        })
-        .catch((e) => {
-          console.log('error registering user');
-          alert('I am sorry but this went wrong.');
-        });
+      try {
+        const response = await axios.post(
+          'https://mequal.herokuapp.com/users',
+          {
+            Username: username,
+            Password: password,
+            Email: email,
+            Birthday: birthday,
+          }
+        );
+        alert(
+          'Successfully registered. You will now be redirected to the login page.'
+        );
+        window.open('/', '_self');
+      } catch (e) {
+        if (e.response.status === 400) {
+          alert(`I am sorry but this went wrong: ${e.response.data}`);
+        } else {
+          alert(
+            `I am sorry but this went wrong: Please check if your password meets the requirements.`
+          );
+        }
+      }
     }
   };
 
