@@ -31,6 +31,7 @@ class MainView extends React.Component {
   /* retrieves information from local storage and checks if user is logged in, if yes GET request is made to movies endpoint by calling getMovies method */
   componentDidMount() {
     const accessToken = localStorage.getItem('token');
+
     if (accessToken !== null) {
       console.log('access reached');
       this.getUser(accessToken);
@@ -113,7 +114,7 @@ class MainView extends React.Component {
     // with redux: movies is extracted from this.props rather than from the this.state
     // #5
     const { movies, user, genres, directors } = this.props;
-    const username = user.Username;
+    const username = localStorage.getItem('username');
     console.log(username);
 
     return (
