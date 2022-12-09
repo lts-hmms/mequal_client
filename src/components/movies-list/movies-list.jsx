@@ -13,7 +13,7 @@ const mapStateToProps = (state) => {
 // moviesLists props contain two properties: 2nd being movies which was passed in render mainView
 // array movies can be filtered based on value present in visibilityFilter, the render filtered array
 function MoviesList(props) {
-  const { movies, visibilityFilter } = props;
+  const { movies, visibilityFilter, user } = props;
   let filteredMovies = movies;
 
   if (visibilityFilter !== '') {
@@ -32,7 +32,7 @@ function MoviesList(props) {
       {filteredMovies.map((m) => (
         <Col md={4} key={m._id}>
           <div className="movie-cards mt-5">
-            <MovieCard movie={m} />
+            <MovieCard movie={m} user={user} />
           </div>
         </Col>
       ))}

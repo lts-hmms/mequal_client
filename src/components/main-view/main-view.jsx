@@ -49,6 +49,7 @@ class MainView extends React.Component {
     this.props.setUser(authData.user);
     localStorage.setItem('token', authData.token);
     localStorage.setItem('username', authData.user.Username);
+    localStorage.setItem('user', authData.user);
 
     /* the moment a user logs in, GET request to 'movies endpoint */
     this.getMovies(authData.token);
@@ -116,6 +117,7 @@ class MainView extends React.Component {
     const { movies, user, genres, directors } = this.props;
     const username = localStorage.getItem('username');
     console.log(username);
+    console.log(user);
 
     return (
       <Router>
@@ -153,7 +155,7 @@ class MainView extends React.Component {
                   );
                 return (
                   <Col>
-                    <FavsView user={user} movies={movies} />
+                    <FavsView movies={movies} user={user} />
                   </Col>
                 );
               }}
