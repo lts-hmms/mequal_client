@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Card, Badge, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import FavsButton from '../favs-button/favs-button';
+import './movie-card.scss';
 
 export function MovieCard({ movie, toggleFavs, user }) {
   return (
