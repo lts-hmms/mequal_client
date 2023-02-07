@@ -4,11 +4,10 @@ import { Col } from 'react-bootstrap';
 import { MovieCard } from '../movie-card/movie-card';
 
 function FavsView(props) {
-  const { movies } = props;
-  const { user } = props;
+  const { movies, user } = props;
+  const { favslist } = user;
   console.log(user);
   console.log(props);
-  const favslist = user.Favslist;
 
   return (
     <div className="Favslist row justify-content-center my-5">

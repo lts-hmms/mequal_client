@@ -8,8 +8,7 @@ import { setFavorite, deleteFavorite } from '../../actions/actions';
 
 function FavsButton(props) {
   const { movie, user } = props;
-  const username = user.Username;
-  const { Favslist } = user;
+  const { username, Favslist } = user;
   const isFav = Favslist.includes(movie._id);
 
   const toggleFavs = (movieId) => {

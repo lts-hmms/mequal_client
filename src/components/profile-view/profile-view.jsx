@@ -9,13 +9,6 @@ import { connect } from 'react-redux';
 import { MovieCard } from '../movie-card/movie-card';
 import { deleteUser, setUser, updateUser } from '../../actions/actions';
 
-const mapStateToProps = (state) => ({
-  user: state.user,
-  username: state.user.Username,
-  birthday: state.user.Birthday,
-  email: state.user.Email,
-});
-
 function ProfileView(props) {
   const validate = () => {
     let isReq = true;
@@ -163,5 +156,12 @@ function ProfileView(props) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  username: state.user.Username,
+  birthday: state.user.Birthday,
+  email: state.user.Email,
+});
 
 export default connect(mapStateToProps, { updateUser })(ProfileView);
