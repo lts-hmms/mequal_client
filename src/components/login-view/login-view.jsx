@@ -4,7 +4,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export function LoginView(props) {
+export const LoginView = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // hook for each input
@@ -106,7 +106,7 @@ export function LoginView(props) {
       </div>
     </div>
   );
-}
+};
 
 LoginView.propTypes = {
   user: PropTypes.shape({
