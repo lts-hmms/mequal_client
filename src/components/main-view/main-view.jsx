@@ -1,108 +1,284 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+import React, { useEffect } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import { Row, Col, Container } from 'react-bootstrap';
+import {
+  setMovies,
+  setUser,
+  setGenres,
+  setDirectors,
+} from '../../actions/actions';
+
+import MoviesList from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
-import { MovieCard } from '../movie-card/movie-card';
+import { RegistrationView } from '../registration-view/registration-view';
 import { MovieView } from '../movie-view/movie-view';
 import { NavbarView } from '../navbar/navbar';
-import mequalLogo from '../mequalLogo.png';
+import { DirectorView } from '../director-view/director-view';
+import { GenreView } from '../genre-view/genre-view';
+import ProfileView from '../profile-view/profile-view';
+import FavsView from '../favs-view/favs-view';
 
-export class MainView extends React.Component {
-        constructor() {
-                // 'registers' class MainView as a React Component
-                super();
-                // initializing state with starting values
-                this.state = {
-                        movies: [],
-                        selectedMovie: null,
-                        user: null,
-                };
-        }
+import './main-view.scss';
 
-        componentDidMount() {
-                axios.get('https://mequal.herokuapp.com/movies')
-                        .then((response) => {
-                                this.setState({
-                                        movies: response.data,
-                                });
-                        })
-                        .catch((error) => {
-                                console.log(error);
-                        });
-        }
+const MainView = (props) => {
+  const { movies, user, genres, directors } = props;
+  const username = localStorage.getItem('username');
+  console.log(username);
+  console.log(user);
 
-        /* When a movie is clicked, this function is invoked and updates the state of the `selectedMovie` property to that movie */
-        setSelectedMovie(newSelectedMovie) {
-                this.setState({ selectedMovie: newSelectedMovie });
-        }
+  /* retrieves information from local storage and checks if user is logged in, if yes GET request is made to movies endpoint by calling getMovies method */
+  // componentDidMount() {
+  //   const accessToken = localStorage.getItem('token');
 
-        /* When a user successfully logs in, this function updates the `user` property in state to that particular user */
-        onLoggedIn(user) {
-                this.setState({
-                        user,
-                });
-        }
+  //   if (accessToken !== null) {
+  //     console.log('access reached');
+  //     this.getUser(accessToken);
+  //     this.getMovies(accessToken);
+  //     // this.setFavorite(accessToken);
+  //     this.getGenres(accessToken);
+  //     this.getDirectors(accessToken);
+  //   }
+  // }
 
-        render() {
-                const { movies, selectedMovie, user } = this.state;
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem('token');
+  //   if (accessToken !== null) {
+  //     getUser(accessToken);
+  //     console.log('getUser reached');
+  //   }
+  //   if (user !== null && movies.length === 0) {
+  //     getMovies(accessToken);
+  //     console.log('getMovies reached');
+  //   }
+  // }, []);
 
-                /* If there's no user, the LoginView is rendered. If there is a user logged in, the user details are passed as a prop to the LoginView */
-                if (!user) return <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />;
+  /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
+  /* authentication data is saved to localStorage */
+  const onLoggedIn = (authData) => {
+    console.log(authData);
+    props.setUser(authData.user);
+    localStorage.setItem('token', authData.token);
+    localStorage.setItem('username', authData.user.Username);
+    localStorage.setItem('user', authData.user);
 
-                /* Before the movies have been loaded */
-                if (movies.length === 0) return <div className="main-view" />;
+    /* the moment a user logs in, GET request to 'movies endpoint */
+    getMovies(authData.token);
+    getGenres(authData.token);
+    getDirectors(authData.token);
+  };
 
+  const getUser = (token) => {
+    // const token = localStorage.getItem('token');
+    const username = localStorage.getItem('user');
+    axios
+      .get(`https://mequal.herokuapp.com/users/${username}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        props.setUser(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getMovies = (token) => {
+    axios
+      .get('https://mequal.herokuapp.com/movies', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        props.setMovies(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const getGenres = (token) => {
+    axios
+      .get('https://mequal.herokuapp.com/genres/', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        props.setGenres(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getDirectors = (token) => {
+    axios
+      .get('https://mequal.herokuapp.com/directors/', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        props.setDirectors(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  return (
+    <Router>
+      <NavbarView username={username} />
+      <Container>
+        {/* <Row>
+            <Img src="./mequalLogo.png" />
+          </Row> */}
+        <Row className="main-view">
+          <Route
+            exact
+            path="/"
+            render={() => {
+              if (!username)
                 return (
-                        <div>
-                                <NavbarView />
-                                {/* If the state of `selectedMovie`is not null, than selected movie will be returned, otherwise all movies will be returned */}
-                                {selectedMovie ? (
-                                        <Container>
-                                                <Row>
-                                                        <MovieView
-                                                                movie={selectedMovie}
-                                                                onBackClick={(newSelectedMovie) => {
-                                                                        this.setSelectedMovie(newSelectedMovie);
-                                                                }}
-                                                        />
-                                                </Row>
-                                        </Container>
-                                ) : (
-                                        <Container>
-                                                <Row className="row justify-content-center mt-5">
-                                                        <Col md={3}>
-                                                                <img
-                                                                        className="logo "
-                                                                        src={mequalLogo}
-                                                                        alt="mequal logo"
-                                                                        style={{ width: '100%' }}
-                                                                />
-                                                        </Col>
-                                                </Row>
-                                                <Row className="row">
-                                                        {movies.map((movie) => (
-                                                                <Col md={4}>
-                                                                        <div className="movie-cards mt-5">
-                                                                                <MovieCard
-                                                                                        key={movie._id}
-                                                                                        movieData={movie}
-                                                                                        onMovieClick={(
-                                                                                                newSelectedMovie
-                                                                                        ) => {
-                                                                                                this.setSelectedMovie(
-                                                                                                        newSelectedMovie
-                                                                                                );
-                                                                                        }}
-                                                                                />
-                                                                        </div>
-                                                                </Col>
-                                                        ))}
-                                                </Row>
-                                        </Container>
-                                )}
-                        </div>
+                  <Col>
+                    <LoginView onLoggedIn={(user) => onLoggedIn(user)} />
+                  </Col>
                 );
-        }
-}
+              if (movies.length === 0) return <div className="main-view" />;
+              return <MoviesList movies={movies} />;
+            }}
+          />
+          {/* Favorites */}
+          <Route
+            path="/users/:user/favs/"
+            render={() => {
+              if (!username)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
+              return (
+                <Col>
+                  <FavsView movies={movies} user={user} />
+                </Col>
+              );
+            }}
+          />
+          {/* registration */}
+          <Route
+            path="/register"
+            render={() => {
+              if (username) return <Redirect to="/" />;
+              return (
+                <Col>
+                  <RegistrationView />
+                </Col>
+              );
+            }}
+          />
+          {/* profile */}
+          <Route
+            path="/users/:user/profile"
+            render={() => {
+              if (!username)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
+              return (
+                <Container>
+                  <Col>
+                    <ProfileView user={user} movies={movies} />
+                  </Col>
+                </Container>
+              );
+            }}
+          />
+          {/* certain movie */}
+          <Route
+            path="/movies/:movieId"
+            render={({ match, history }) => {
+              if (!username)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
+              if (movies.length === 0) return <div className="main-view" />;
+              return (
+                <MovieView
+                  movie={movies.find((m) => m._id === match.params.movieId)}
+                  onBackClick={() => history.goBack()}
+                />
+              );
+            }}
+          />
+          {/* certain director */}
+          <Route
+            path="/directors/:directorName"
+            render={({ match, history }) => {
+              if (!username)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
+              if (movies.length === 0) return <div className="main-view" />;
+              return (
+                <Col md={8}>
+                  <DirectorView
+                    director={directors.find(
+                      (d) => d.Name === match.params.directorName
+                    )}
+                    onBackClick={() => history.goBack()}
+                  />
+                </Col>
+              );
+            }}
+          />
+          {/* certain genre */}
+          <Route
+            path="/genres/:genreName"
+            render={({ match, history }) => {
+              if (!username)
+                return (
+                  <Col>
+                    <LoginView onLoggedIn={(user) => this.onLoggedIn(user)} />
+                  </Col>
+                );
+              if (movies.length === 0) return <div className="main-view" />;
+              return (
+                <Col md={8}>
+                  <GenreView
+                    genre={genres.find(
+                      (g) => g.Name === match.params.genreName
+                    )}
+                    onBackClick={() => history.goBack()}
+                  />
+                </Col>
+              );
+            }}
+          />
+        </Row>
+      </Container>
+    </Router>
+  );
+};
+// func allows comp (MainView) to subscribe to store updates, anytime store is updated, this func will be called
+// #7
+const mapStateToProps = (state) => ({
+  user: state.user,
+  movies: state.movies,
+  genres: state.genres,
+  directors: state.directors,
+});
 
-export default MainView;
+// Higher Order Comp: function that takes comp and returns new comp
+// {setMovies} is mapDispatchToProps
+// #8
+export default connect(mapStateToProps, {
+  setUser,
+  setMovies,
+  setGenres,
+  setDirectors,
+})(MainView);

@@ -1,31 +1,45 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
+import { Container, Nav, Navbar, Form } from 'react-bootstrap';
 
-export function NavbarView() {
-        return (
-                <Navbar bg="dark" variant="dark" expand="lg">
-                        <Navbar.Brand href="#home">mequal</Navbar.Brand>
-                        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                        <Navbar.Collapse id="basic-navbar-nav">
-                                <Nav className="me-auto">
-                                        <Nav.Link href="#home">Home</Nav.Link>
-                                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                                                <NavDropdown.Item href="#action/3.1">Genres</NavDropdown.Item>
-                                                <NavDropdown.Item href="#action/3.2">Directors</NavDropdown.Item>
-                                                <NavDropdown.Item href="#action/3.3">Actors</NavDropdown.Item>
-                                        </NavDropdown>
-                                </Nav>
-                                <Form className="d-flex">
-                                        <Form.Control
-                                                type="search"
-                                                placeholder="Search"
-                                                className="me-2"
-                                                aria-label="Search"
-                                        />
-                                </Form>
-                        </Navbar.Collapse>
-                </Navbar>
-        );
+export function NavbarView({ username }) {
+  const onLoggedOut = () => {
+    localStorage.clear();
+    window.open('/', '_self');
+  };
+
+  const isAuth = () => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+    if (localStorage.getItem('token')) {
+      return localStorage.getItem('token');
+    }
+    return false;
+  };
+
+  return (
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Container>
+        <Navbar.Brand href="/">mequal</Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            {isAuth() && (
+              <Nav.Link href={`/users/${username}/profile`}>
+                {username}
+              </Nav.Link>
+            )}
+            {isAuth() && (
+              <Nav.Link href={`/users/${username}/favs`}>Favs</Nav.Link>
+            )}
+
+            {isAuth() && <Nav.Link onClick={onLoggedOut}>Logout</Nav.Link>}
+
+            {!isAuth() && <Nav.Link href="/">Login</Nav.Link>}
+            {!isAuth() && <Nav.Link href="/register">Register</Nav.Link>}
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 }
-
-export default NavbarView;
