@@ -43,5 +43,3 @@ export function NavbarView({ username }) {
     </Navbar>
   );
 }
-
-export default NavbarView;

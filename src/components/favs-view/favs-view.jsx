@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Col } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import { MovieCard } from '../movie-card/movie-card';
 
 function FavsView(props) {
@@ -31,5 +32,23 @@ function FavsView(props) {
     </div>
   );
 }
+
+FavsView.propTypes = {
+  movies: PropTypes.shape({
+    _id: PropTypes.number.isRequired,
+    Title: PropTypes.string.isRequired,
+    Year: PropTypes.number.isRequired,
+    ImageUrl: PropTypes.string.isRequired,
+    Featured: PropTypes.bool.isRequired,
+    Description: PropTypes.string,
+    Genres: PropTypes.array.isRequired,
+    Actors: PropTypes.array.isRequired,
+    Directors: PropTypes.array.isRequired,
+  }).isRequired,
+  user: PropTypes.shape({
+    favslist: PropTypes.array.isRequired,
+  }).isRequired,
+  toggleFavs: PropTypes.func.isRequired,
+};
 
 export default FavsView;

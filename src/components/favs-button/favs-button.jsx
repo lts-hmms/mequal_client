@@ -71,10 +71,13 @@ export default connect(mapStateToProps, { setFavorite, deleteFavorite })(
 );
 
 FavsButton.propTypes = {
-  button: PropTypes.shape({
-    movie: PropTypes.array.isRequired,
-    user: PropTypes.object.isRequired,
-    Favslist: PropTypes.array.isRequired,
+  movie: PropTypes.shape({
+    _id: PropTypes.number.isRequired,
   }),
-  onClick: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    Favslist: PropTypes.array.isRequired,
+    username: PropTypes.string.isRequired,
+  }),
+  setFavorite: PropTypes.func.isRequired,
+  deleteFavorite: PropTypes.func.isRequired,
 };
