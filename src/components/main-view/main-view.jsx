@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react/prop-types */
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -19,7 +20,6 @@ import { DirectorView } from '../director-view/director-view';
 import { GenreView } from '../genre-view/genre-view';
 import ProfileView from '../profile-view/profile-view';
 import FavsView from '../favs-view/favs-view';
-// import mequalLogo from '../mequalLogo.png';
 
 import './main-view.scss';
 
@@ -42,6 +42,18 @@ const MainView = (props) => {
   //     this.getDirectors(accessToken);
   //   }
   // }
+
+  // useEffect(() => {
+  //   const accessToken = localStorage.getItem('token');
+  //   if (accessToken !== null) {
+  //     getUser(accessToken);
+  //     console.log('getUser reached');
+  //   }
+  //   if (user !== null && movies.length === 0) {
+  //     getMovies(accessToken);
+  //     console.log('getMovies reached');
+  //   }
+  // }, []);
 
   /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
   /* authentication data is saved to localStorage */
@@ -66,7 +78,7 @@ const MainView = (props) => {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        this.props.setUser(res.data);
+        props.setUser(res.data);
       })
       .catch((error) => {
         console.log(error);
