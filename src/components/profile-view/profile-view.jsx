@@ -1,20 +1,13 @@
 /* eslint-disable no-console */
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Container, Button, Row, Col, Form, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import Moment from 'react-moment';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { Button, Row, Col, Form } from 'react-bootstrap';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import Moment from 'react-moment';
 import { MovieCard } from '../movie-card/movie-card';
-import { deleteUser, setUser, updateUser } from '../../actions/actions';
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  username: state.user.Username,
-  birthday: state.user.Birthday,
-  email: state.user.Email,
-});
+import { deleteUser, updateUser } from '../../actions/actions';
 
 function ProfileView(props) {
   const validate = () => {
@@ -163,5 +156,12 @@ function ProfileView(props) {
     </div>
   );
 }
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+  username: state.user.Username,
+  birthday: state.user.Birthday,
+  email: state.user.Email,
+});
 
 export default connect(mapStateToProps, { updateUser })(ProfileView);

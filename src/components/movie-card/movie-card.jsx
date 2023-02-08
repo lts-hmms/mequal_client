@@ -44,3 +44,21 @@ export function MovieCard({ movie, toggleFavs, user }) {
     </Container>
   );
 }
+
+MovieCard.propTypes = {
+  movie: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    Title: PropTypes.string.isRequired,
+    Year: PropTypes.number.isRequired,
+    ImageUrl: PropTypes.string.isRequired,
+    Featured: PropTypes.bool.isRequired,
+    Description: PropTypes.string,
+    Genres: PropTypes.array.isRequired,
+    Actors: PropTypes.array.isRequired,
+    Directors: PropTypes.array.isRequired,
+  }).isRequired,
+  user: PropTypes.shape({
+    Favslist: PropTypes.array.isRequired,
+  }).isRequired,
+  toggleFavs: PropTypes.func.isRequired,
+};
