@@ -4,7 +4,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export const LoginView = (props) => {
+export function LoginView(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // hook for each input
@@ -46,6 +46,7 @@ export const LoginView = (props) => {
         .then((response) => {
           const { data } = response;
           props.onLoggedIn(data);
+          console.log('login');
         })
         .catch((e) => {
           console.log('no such user');
@@ -106,12 +107,4 @@ export const LoginView = (props) => {
       </div>
     </div>
   );
-};
-
-LoginView.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-  }),
-  onLoggedIn: PropTypes.func.isRequired,
-};
+}

@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import { connect } from 'react-redux';
+import { connect, useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { setFavorite, deleteFavorite } from '../../actions/actions';
-
-function FavsButton(props) {
-  const { movie, user } = props;
+export function FavsButton(props) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+  const movie = props;
   const { username, Favslist } = user;
   const isFav = Favslist.includes(movie._id);
 
@@ -60,24 +60,3 @@ function FavsButton(props) {
     </Button>
   );
 }
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  toggleFavs: state.toggleFavs,
-});
-
-export default connect(mapStateToProps, { setFavorite, deleteFavorite })(
-  FavsButton
-);
-
-FavsButton.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.number.isRequired,
-  }),
-  user: PropTypes.shape({
-    Favslist: PropTypes.array.isRequired,
-    username: PropTypes.string.isRequired,
-  }),
-  setFavorite: PropTypes.func.isRequired,
-  deleteFavorite: PropTypes.func.isRequired,
-};

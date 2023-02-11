@@ -1,8 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Card, Badge, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import FavsButton from '../favs-button/favs-button';
+import { FavsButton } from '../favs-button/favs-button';
 import './movie-card.scss';
 
 export function MovieCard({ movie, toggleFavs, user }) {
@@ -22,7 +21,13 @@ export function MovieCard({ movie, toggleFavs, user }) {
             <Card.Text>
               {movie.Genres.map((genre) => (
                 <Link to={`/genres/${genre.Name}`}>
-                  <Badge pill variant="link" bg="light" text="dark">
+                  <Badge
+                    key={genre.name}
+                    pill
+                    variant="link"
+                    bg="light"
+                    text="dark"
+                  >
                     {genre.Name}
                   </Badge>
                 </Link>
@@ -33,7 +38,7 @@ export function MovieCard({ movie, toggleFavs, user }) {
             <Card.Text>
               {movie.Directors.map((director) => (
                 <Link to={`/directors/${director.Name}`}>
-                  <div>by {director.Name}</div>
+                  <div key={director.Name}>by {director.Name}</div>
                 </Link>
               ))}
             </Card.Text>
@@ -44,21 +49,3 @@ export function MovieCard({ movie, toggleFavs, user }) {
     </Container>
   );
 }
-
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    Title: PropTypes.string.isRequired,
-    Year: PropTypes.number.isRequired,
-    ImageUrl: PropTypes.string.isRequired,
-    Featured: PropTypes.bool.isRequired,
-    Description: PropTypes.string,
-    Genres: PropTypes.array.isRequired,
-    Actors: PropTypes.array.isRequired,
-    Directors: PropTypes.array.isRequired,
-  }).isRequired,
-  user: PropTypes.shape({
-    Favslist: PropTypes.array.isRequired,
-  }).isRequired,
-  toggleFavs: PropTypes.func.isRequired,
-};

@@ -1,15 +1,11 @@
 /* eslint-disable no-console */
 import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { Button, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import Moment from 'react-moment';
 import { MovieCard } from '../movie-card/movie-card';
-import { deleteUser, updateUser } from '../../actions/actions';
 
-function ProfileView(props) {
+export function ProfileView(props) {
   const validate = () => {
     let isReq = true;
     if (password && password.length < 6) {
@@ -145,23 +141,14 @@ function ProfileView(props) {
           </Form>
         </Col>
         <Row className="mt-5">
-          <Link
+          <Col
             className="h6 text-center btn-link justify-content-center"
             onClick={deleteProfile}
           >
             Delete profile
-          </Link>
+          </Col>
         </Row>
       </div>
     </div>
   );
 }
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  username: state.user.Username,
-  birthday: state.user.Birthday,
-  email: state.user.Email,
-});
-
-export default connect(mapStateToProps, { updateUser })(ProfileView);

@@ -152,12 +152,3 @@ export function RegistrationView(props) {
     </div>
   );
 }
-
-RegistrationView.propTypes = {
-  registration: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    birthday: PropTypes.string.isRequired,
-  }),
-};
