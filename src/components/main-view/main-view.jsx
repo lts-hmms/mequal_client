@@ -69,10 +69,10 @@ export function MainView() {
 
   useEffect(() => {
     if (token !== null) {
-      getUser(token);
       getMovies(token);
       getDirectors(token);
       getGenres(token);
+      getUser(token);
     }
   }, [token]);
 

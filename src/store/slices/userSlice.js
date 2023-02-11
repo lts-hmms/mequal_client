@@ -12,10 +12,15 @@ const userSlice = createSlice({
       const { ...stateUser } = action.payload;
       return stateUser;
     },
-    // addFav(state, action) {},
-    // deleteFav(state, action) {
-    //     state.user.Favslist.push({})
-    // }
+    addFav(state, action) {
+      state.Favslist.push(action.payload);
+    },
+    deleteFav(state, action) {
+      const updateFavs = state.Favslist.filter(
+        (movie) => movie !== action.payload
+      );
+      state.Favslist = updateFavs;
+    },
     // changePassword(state, action) {
     //     state.
     // },
@@ -23,5 +28,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser } = userSlice.actions;
+export const { setUser, addFav, deleteFav } = userSlice.actions;
 export const userReducer = userSlice.reducer;

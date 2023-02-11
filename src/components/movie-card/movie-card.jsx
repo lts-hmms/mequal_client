@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FavsButton } from '../favs-button/favs-button';
 import './movie-card.scss';
 
-export function MovieCard({ movie, toggleFavs, user }) {
+export function MovieCard({ movie, toggleFavs }) {
   return (
     <Container>
       <Row className="row justify-content-center mt-5">
@@ -42,7 +42,7 @@ export function MovieCard({ movie, toggleFavs, user }) {
                 </Link>
               ))}
             </Card.Text>
-            <FavsButton movie={movie} user={user} toggleFavs={toggleFavs} />
+            <FavsButton movie={movie} toggleFavs={toggleFavs} />
           </Card.Body>
         </Card>
       </Row>

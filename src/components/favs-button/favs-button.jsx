@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import { connect, useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFav, deleteFav } from '../../store/slices/userSlice';
 
 export function FavsButton(props) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const movie = props;
-  const { username, Favslist } = user;
-  const isFav = Favslist.includes(movie._id);
+
+  const { movie } = props;
+
+  const isFav = user.Favslist.includes(movie._id);
 
   const toggleFavs = (movieId) => {
     const token = localStorage.getItem('token');
@@ -17,13 +18,13 @@ export function FavsButton(props) {
     if (isFav === true) {
       axios
         .delete(
-          `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+          `https://mequal.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         .then((res) => {
-          props.deleteFavorite(movieId);
+          dispatch(deleteFav(movieId));
           alert(`Movie removed from your favs!`);
         })
         .catch((error) => {
@@ -32,16 +33,17 @@ export function FavsButton(props) {
     }
     // Add movie if not exists
     if (isFav === false) {
+      console.log(movieId);
       axios
         .post(
-          `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+          `https://mequal.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         .then((res) => {
-          props.setFavorite(movieId);
+          dispatch(addFav(movieId));
           alert(`Movie added to your Favs <3`);
         })
         .catch((error) => {
