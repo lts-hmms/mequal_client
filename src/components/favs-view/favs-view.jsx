@@ -14,11 +14,11 @@ export function FavsView() {
         <h2>💜</h2>
       </div>
 
-      {user.favslist?.map((m) => {
-        const res = movies.filter((movie) => movie._id === m._id);
+      {user.Favslist?.map((m) => {
+        const res = movies.filter((movie) => movie._id === m);
         if (res.length > 0) {
           return res.map((m) => (
-            <Col md={3} key={m._id}>
+            <Col md={4} key={m._id}>
               <div className="movie-cards mt-5">
                 <MovieCard movie={m} />
               </div>
