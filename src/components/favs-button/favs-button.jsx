@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
-import { addFav, deleteFav } from '../../store/slices/userSlice';
+import { addFav, deleteFav } from '../../store';
 
 export function FavsButton(props) {
   const dispatch = useDispatch();
@@ -33,7 +33,6 @@ export function FavsButton(props) {
     }
     // Add movie if not exists
     if (isFav === false) {
-      console.log(movieId);
       axios
         .post(
           `https://mequal.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
