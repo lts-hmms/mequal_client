@@ -1,97 +1,88 @@
-/* eslint-disable no-console */
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import Moment from 'react-moment';
-import { MovieCard } from '../movie-card/movie-card';
-import { deleteUser, updateUser } from '../../actions/actions';
+import { changeEmail, changePassword, deleteUser } from '../../store';
 
-function ProfileView(props) {
+export function ProfileView() {
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [emailErr, setEmailErr] = useState('');
+  const [passwordErr, setPasswordErr] = useState('');
+
+  // validate user input
   const validate = () => {
     let isReq = true;
-    if (password && password.length < 6) {
-      setPasswordErr('Give me at least 6 characters please');
+    if (password && password.length < 8) {
+      setPasswordErr('Give me at least 8 characters please.');
       isReq = false;
     }
-    if (email && email.indexOf('@') === -1 && email.indexOf('.') === -1) {
-      setEmailErr("This doesn't look like an email to me ");
+    if (
+      (email && email.indexOf('@') === -1) ||
+      (email && email.indexOf('.') === -1)
+    ) {
+      setEmailErr("This doesn't look like an email to me.");
       isReq = false;
     }
     return isReq;
   };
 
-  const getUser = () => {
-    const token = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
-    axios
-      .get(`https://mequal.herokuapp.com/users/${props.username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        this.props.setUser(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const deleteProfile = (e) => {
     e.preventDefault();
     const token = localStorage.getItem('token');
-    const username = localStorage.getItem('user');
-    axios
-      .delete(`https://mequal.herokuapp.com/users/${username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then(() => {
-        localStorage.removeItem('user');
-        localStorage.removeItem('token');
-        alert('Profile has been deleted.');
-        deleteUser({});
-        window.open('/', '_self');
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const updateUser = (e) => {
-    e.preventDefault();
-    const username = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
-    axios
-      .patch(
-        `https://mequal.herokuapp.com/users/${username}`,
-        {
-          Email: this.state.Email,
-          ...(this.Password ? { Password: this.state.Password } : {}),
-        },
-        {
+    if (user.Username && token) {
+      const warningAlert = confirm(
+        'Are you sure you want to permanently delete your account?'
+      );
+      if (!warningAlert) return;
+      axios
+        .delete(`https://mequal.herokuapp.com/users/${user.Username}`, {
           headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((res) => {
-        console.log('response', res);
-        alert('Your profile is updated now.');
-        this.setState({
-          Password: res.data.Password,
-          Email: res.data.Email,
+        })
+        .then(() => {
+          localStorage.clear();
+          alert('Profile has been deleted.');
+          deleteUser();
+          window.open('/', '_self');
+        })
+        .catch(() => {
+          alert('Something went wrong. Please contact the admin.');
         });
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
+    }
   };
 
-  const handleChangeEmail = (event) => {
-    this.setState({ Email: event.target.value });
-  };
-
-  const handleChangePW = (event) => {
-    this.setState({ Password: event.target.value });
+  const updateUser = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    const isReq = validate();
+    if (isReq) {
+      axios
+        .patch(
+          `https://mequal.herokuapp.com/users/${user.Username}`,
+          {
+            Email: email || user.Email,
+            ...(password ? { Password: password } : {}),
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((res) => {
+          alert('Your profile is updated now.');
+          dispatch(changeEmail({ Email: res.data.Email }));
+          dispatch(changePassword({ Password: res.data.Password }));
+        })
+        .catch(() => {
+          alert(
+            `I am sorry, this went wrong: Please check if you meet the requirements.`
+          );
+        });
+    }
   };
 
   return (
@@ -102,12 +93,12 @@ function ProfileView(props) {
         <Col md={8} lg={6}>
           <h5 className="Username">
             <div className="value">Username:</div>
-            <div className="text-secondary">{props.username}</div>
+            <div className="text-secondary">{user.Username}</div>
           </h5>
           <h5 className="Birthday">
             <div className="value">Birthday: </div>
             <div className="text-secondary">
-              <Moment format="YYYY-MM-DD">{props.birthday}</Moment>
+              <Moment format="YYYY-MM-DD">{user.Birthday}</Moment>
             </div>
           </h5>
           <Form>
@@ -115,29 +106,30 @@ function ProfileView(props) {
               <Form.Label className="h5">Password:</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="******"
-                value={this.Password}
-                onChange={this.handleChangePW}
+                placeholder="********"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
-
-              {/* {PasswordErr && <p>{PasswordErr}</p>} */}
+              {passwordErr && <p>{passwordErr}</p>}
+              <Form.Text className="text-muted">
+                Minimum of eight characters, at least one letter and one number.
+              </Form.Text>
             </Form.Group>
             <Form.Group controlId="formEmail">
               <Form.Label className="h5">Email:</Form.Label>
               <Form.Control
                 type="email"
-                placeholder={props.email}
-                onChange={this.handleChangeEmail}
+                placeholder={user.Email}
+                onChange={(event) => setEmail(event.target.value)}
               />
-              {/* {emailErr && <p>{emailErr}</p>} */}
+              {emailErr && <p>{emailErr}</p>}
             </Form.Group>
             <Col>
               <Button
                 className="btn mt-3"
                 variant="dark"
                 type="submit"
-                // eslint-disable-next-line react/jsx-no-bind
-                // onClick={this.updateUser.bind(this)}
+                onClick={updateUser}
               >
                 Update profile
               </Button>
@@ -145,23 +137,14 @@ function ProfileView(props) {
           </Form>
         </Col>
         <Row className="mt-5">
-          <Link
+          <Col
             className="h6 text-center btn-link justify-content-center"
             onClick={deleteProfile}
           >
             Delete profile
-          </Link>
+          </Col>
         </Row>
       </div>
     </div>
   );
 }
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  username: state.user.Username,
-  birthday: state.user.Birthday,
-  email: state.user.Email,
-});
-
-export default connect(mapStateToProps, { updateUser })(ProfileView);

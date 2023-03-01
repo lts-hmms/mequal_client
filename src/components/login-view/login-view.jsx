@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export const LoginView = (props) => {
+export function LoginView(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // hook for each input
@@ -47,8 +46,7 @@ export const LoginView = (props) => {
           const { data } = response;
           props.onLoggedIn(data);
         })
-        .catch((e) => {
-          console.log('no such user');
+        .catch(() => {
           alert('Username or Password is incorrect. Please try again.');
         });
     }
@@ -106,12 +104,4 @@ export const LoginView = (props) => {
       </div>
     </div>
   );
-};
-
-LoginView.propTypes = {
-  user: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-  }),
-  onLoggedIn: PropTypes.func.isRequired,
-};
+}

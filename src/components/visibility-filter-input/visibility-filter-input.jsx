@@ -1,18 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { Form } from 'react-bootstrap';
+import { changeSearch } from '../../store/slices/moviesSlice';
 
-import { setFilter } from '../../actions/actions';
+export function VisibilityFilterInput() {
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.movies.searchTerm);
 
-function VisibilityFilterInput(props) {
+  const handleSearchTermChange = (event) => {
+    dispatch(changeSearch(event.target.value));
+  };
+
   return (
     <Form.Control
-      onChange={(e) => props.setFilter(e.target.value)}
-      value={props.visibilityFilter}
+      onChange={handleSearchTermChange}
+      value={searchTerm}
       placeholder="search"
     />
   );
 }
-
-export default connect(null, { setFilter })(VisibilityFilterInput);

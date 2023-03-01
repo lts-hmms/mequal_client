@@ -1,15 +1,16 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFav, deleteFav } from '../../store';
 
-import { setFavorite, deleteFavorite } from '../../actions/actions';
+export function FavsButton(props) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
 
-function FavsButton(props) {
-  const { movie, user } = props;
-  const { username, Favslist } = user;
-  const isFav = Favslist.includes(movie._id);
+  const { movie } = props;
+
+  const isFav = user.Favslist.includes(movie._id);
 
   const toggleFavs = (movieId) => {
     const token = localStorage.getItem('token');
@@ -17,13 +18,13 @@ function FavsButton(props) {
     if (isFav === true) {
       axios
         .delete(
-          `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+          `https://mequal.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         .then((res) => {
-          props.deleteFavorite(movieId);
+          dispatch(deleteFav(movieId));
           alert(`Movie removed from your favs!`);
         })
         .catch((error) => {
@@ -34,14 +35,14 @@ function FavsButton(props) {
     if (isFav === false) {
       axios
         .post(
-          `https://mequal.herokuapp.com/users/${username}/movies/${movieId}`,
+          `https://mequal.herokuapp.com/users/${user.Username}/movies/${movie._id}`,
           {},
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         )
         .then((res) => {
-          props.setFavorite(movieId);
+          dispatch(addFav(movieId));
           alert(`Movie added to your Favs <3`);
         })
         .catch((error) => {
@@ -60,24 +61,3 @@ function FavsButton(props) {
     </Button>
   );
 }
-
-const mapStateToProps = (state) => ({
-  user: state.user,
-  toggleFavs: state.toggleFavs,
-});
-
-export default connect(mapStateToProps, { setFavorite, deleteFavorite })(
-  FavsButton
-);
-
-FavsButton.propTypes = {
-  movie: PropTypes.shape({
-    _id: PropTypes.number.isRequired,
-  }),
-  user: PropTypes.shape({
-    Favslist: PropTypes.array.isRequired,
-    username: PropTypes.string.isRequired,
-  }),
-  setFavorite: PropTypes.func.isRequired,
-  deleteFavorite: PropTypes.func.isRequired,
-};
