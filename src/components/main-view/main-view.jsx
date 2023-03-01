@@ -6,7 +6,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Redirect,
+  Navigate,
 } from 'react-router-dom';
 
 import { Row, Col, Container } from 'react-bootstrap';
@@ -170,7 +170,7 @@ export function MainView() {
               path="/register"
               element={
                 user.Username ? (
-                  <Redirect to="/" />
+                  <Navigate to="/" />
                 ) : (
                   <Col>
                     <RegistrationView />
