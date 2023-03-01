@@ -6,7 +6,15 @@ import {
   setGenres,
   setDirectors,
 } from './slices/moviesSlice';
-import { userReducer, setUser } from './slices/userSlice';
+import {
+  userReducer,
+  setUser,
+  changeEmail,
+  changePassword,
+  deleteUser,
+  addFav,
+  deleteFav,
+} from './slices/userSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,4 +23,16 @@ const store = configureStore({
   },
 });
 
-export { store, setMovies, changeSearch, setUser, setGenres, setDirectors };
+export {
+  store,
+  setMovies,
+  changeSearch,
+  setGenres,
+  setDirectors,
+  setUser,
+  changeEmail,
+  changePassword,
+  deleteUser,
+  addFav,
+  deleteFav,
+};

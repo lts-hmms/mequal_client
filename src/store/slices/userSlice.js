@@ -1,14 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const initialState = {
+  _id: '',
+  Username: '',
+  Password: '',
+  Email: '',
+  Birthday: '',
+  Favslist: [],
+};
+
 const userSlice = createSlice({
   name: 'user',
-  initialState: null,
-  // u: {},
-  // password: '',
-  // email: '
+  initialState,
   reducers: {
     setUser(state, action) {
-      console.log('setUser reducer reached');
       const { ...stateUser } = action.payload;
       return stateUser;
     },
@@ -21,12 +26,24 @@ const userSlice = createSlice({
       );
       state.Favslist = updateFavs;
     },
-    // changePassword(state, action) {
-    //     state.
-    // },
-    // changeEmail(state, action) {},
+    changePassword(state, action) {
+      return { ...state, ...action.payload };
+    },
+    changeEmail(state, action) {
+      return { ...state, ...action.payload };
+    },
+    deleteUser() {
+      return { ...initialState };
+    },
   },
 });
 
-export const { setUser, addFav, deleteFav } = userSlice.actions;
+export const {
+  setUser,
+  addFav,
+  deleteFav,
+  changeEmail,
+  changePassword,
+  deleteUser,
+} = userSlice.actions;
 export const userReducer = userSlice.reducer;
