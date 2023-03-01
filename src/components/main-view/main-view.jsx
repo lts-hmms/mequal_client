@@ -43,7 +43,6 @@ export function MainView() {
   const username = localStorage.getItem('username');
 
   const onLoggedIn = (authData) => {
-    console.log(authData);
     localStorage.setItem('token', authData.token);
     localStorage.setItem('username', authData.user.Username);
     dispatch(setUser(authData.user));
@@ -72,58 +71,27 @@ export function MainView() {
       getMovies(token);
       getDirectors(token);
       getGenres(token);
-      getUser(token);
+      // getUser(token);
     }
   }, [token]);
-
-  // const { movies, user, genres, directors } = props;
-  // const username = localStorage.getItem('username');
-  // console.log(username);
-  // console.log(user);
-
-  /* retrieves information from local storage and checks if user is logged in, if yes GET request is made to movies endpoint by calling getMovies method */
-  // componentDidMount() {
-  //   const accessToken = localStorage.getItem('token');
-
-  //   if (accessToken !== null) {
-  //     console.log('access reached');
-  //     this.getUser(accessToken);
-  //     this.getMovies(accessToken);
-  //     // this.setFavorite(accessToken);
-  //     this.getGenres(accessToken);
-  //     this.getDirectors(accessToken);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   const accessToken = localStorage.getItem('token');
-  //   if (accessToken !== null) {
-  //     getUser(accessToken);
-  //     console.log('getUser reached');
-  //   }
-  //   if (user !== null && movies.length === 0) {
-  //     getMovies(accessToken);
-  //     console.log('getMovies reached');
-  //   }
-  // }, []);
 
   /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
   /* authentication data is saved to localStorage */
 
-  const getUser = (token, username) => {
-    // const token = localStorage.getItem('token');
-    // const username = localStorage.getItem('username');
-    axios
-      .get(`https://mequal.herokuapp.com/users/${username}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => {
-        dispatch(setUser(res.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+  // const getUser = (token, username) => {
+  //   // const token = localStorage.getItem('token');
+  //   // const username = localStorage.getItem('username');
+  //   axios
+  //     .get(`https://mequal.herokuapp.com/users/${username}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //     .then((res) => {
+  //       dispatch(setUser(res.data));
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
 
   const getGenres = (token) => {
     axios
@@ -162,7 +130,7 @@ export function MainView() {
               element={
                 <>
                   {
-                    !user ? (
+                    !user.Username ? (
                       <Col>
                         <LoginView
                           onLoggedIn={(authResponse) =>
@@ -184,7 +152,7 @@ export function MainView() {
             <Route
               path="/users/:username/favs/"
               element={
-                !username ? (
+                !user.Username ? (
                   <Col>
                     <LoginView
                       onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
@@ -201,7 +169,7 @@ export function MainView() {
             <Route
               path="/register"
               element={
-                user ? (
+                user.Username ? (
                   <Redirect to="/" />
                 ) : (
                   <Col>
@@ -214,7 +182,7 @@ export function MainView() {
             <Route
               path="/users/:username/profile"
               element={
-                !username ? (
+                !user.Username ? (
                   <Col>
                     <LoginView
                       onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
@@ -233,7 +201,7 @@ export function MainView() {
             <Route
               path="/movies/:movieId"
               element={
-                !username ? (
+                !user.Username ? (
                   <Col>
                     <LoginView
                       onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
@@ -249,7 +217,7 @@ export function MainView() {
             <Route
               path="/directors/:directorName"
               element={
-                !username ? (
+                !user.Username ? (
                   <Col>
                     <LoginView
                       onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
@@ -267,7 +235,7 @@ export function MainView() {
             <Route
               path="/genres/:genreName"
               element={
-                !username ? (
+                !user.Username ? (
                   <Col>
                     <LoginView
                       onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
