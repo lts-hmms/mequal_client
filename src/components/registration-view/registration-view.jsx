@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -70,7 +69,7 @@ export function RegistrationView(props) {
           alert(`I am sorry but this went wrong: ${e.response.data}`);
         } else {
           alert(
-            `I am sorry but this went wrong: Please check if your password meets the requirements.`
+            `I am sorry but this went wrong: Please check if you meet the requirements.`
           );
         }
       }

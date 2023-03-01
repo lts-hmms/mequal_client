@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -46,10 +45,8 @@ export function LoginView(props) {
         .then((response) => {
           const { data } = response;
           props.onLoggedIn(data);
-          console.log('login');
         })
-        .catch((e) => {
-          console.log('no such user');
+        .catch(() => {
           alert('Username or Password is incorrect. Please try again.');
         });
     }

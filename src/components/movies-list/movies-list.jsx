@@ -5,11 +5,6 @@ import { useSelector } from 'react-redux';
 import { MovieCard } from '../movie-card/movie-card';
 import { VisibilityFilterInput } from '../visibility-filter-input/visibility-filter-input';
 
-// const mapStateToProps = (state) => {
-//   const { visibilityFilter } = state;
-//   return { visibilityFilter };
-// };
-
 // moviesLists props contain two properties: 2nd being movies which was passed in render mainView
 // array movies can be filtered based on value present in visibilityFilter, the render filtered array
 export const MoviesList = () => {
