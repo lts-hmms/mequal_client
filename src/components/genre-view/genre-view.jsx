@@ -20,12 +20,6 @@ export function GenreView() {
         <div className="genre-description mt-4">
           <span className="value">{genreObj.Description}</span>
         </div>
-        {/* <div className="genre-movies">
-            <span className="label">Movies: </span>
-            <span className="value">
-            </span>
-          </div> */}
-
         <Button
           variant="dark"
           className="btn mt-3"

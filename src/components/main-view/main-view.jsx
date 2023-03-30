@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect } from 'react';
 import axios from 'axios';
 
@@ -12,13 +11,7 @@ import {
 import { Row, Col, Container } from 'react-bootstrap';
 
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  setMovies,
-  setUser,
-  setDirectors,
-  setGenres,
-  changeSearch,
-} from '../../store';
+import { setMovies, setUser, setDirectors, setGenres } from '../../store';
 
 import { MoviesList } from '../movies-list/movies-list';
 import { LoginView } from '../login-view/login-view';
@@ -46,11 +39,6 @@ export function MainView() {
     localStorage.setItem('token', authData.token);
     localStorage.setItem('username', authData.user.Username);
     dispatch(setUser(authData.user));
-
-    /* the moment a user logs in, GET request to 'movies endpoint */
-    // getMovies(authData.token);
-    // dispatch(setGenres(authData.token));
-    // dispatch(setDirectors(authData.token));
   };
 
   const getMovies = (token) => {
@@ -71,27 +59,8 @@ export function MainView() {
       getMovies(token);
       getDirectors(token);
       getGenres(token);
-      // getUser(token);
     }
   }, [token]);
-
-  /* When a user successfully logs in, this function updates the `user` property in store and main-view is rendered again */
-  /* authentication data is saved to localStorage */
-
-  // const getUser = (token, username) => {
-  //   // const token = localStorage.getItem('token');
-  //   // const username = localStorage.getItem('username');
-  //   axios
-  //     .get(`https://mequal.herokuapp.com/users/${username}`, {
-  //       headers: { Authorization: `Bearer ${token}` },
-  //     })
-  //     .then((res) => {
-  //       dispatch(setUser(res.data));
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
 
   const getGenres = (token) => {
     axios

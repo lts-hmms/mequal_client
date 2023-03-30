@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { MovieCard } from '../movie-card/movie-card';
 import { VisibilityFilterInput } from '../visibility-filter-input/visibility-filter-input';
 
-// moviesLists props contain two properties: 2nd being movies which was passed in render mainView
 // array movies can be filtered based on value present in visibilityFilter, the render filtered array
 export const MoviesList = () => {
   const movies = useSelector((state) => state.movies.moviesList);
@@ -16,12 +15,6 @@ export const MoviesList = () => {
   const filteredMovies = movies.filter((m) =>
     m.Title.toLowerCase().includes(visibilityFilter)
   );
-
-  // if (visibilityFilter !== '') {
-  //   filteredMovies = movies.filter((m) =>
-  //     m.Title.toLowerCase().includes(visibilityFilter.toLowerCase())
-  //   );
-  // }
 
   if (!movies) return <div className="main-view" />;
 

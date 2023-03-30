@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function DirectorView() {
-  // const { director, onBackClick } = this.props;
   const movies = useSelector((state) => state.movies.moviesList);
   const directors = useSelector((state) => state.movies.directorList);
   const navigate = useNavigate();
@@ -24,11 +23,6 @@ export function DirectorView() {
         <div className="genre-description mt-4">
           <span className="value">{directorObj.Bio}</span>
         </div>
-        {/* <div className="director-movies">
-            <span className="label">Movies: </span>
-            <span className="value">
-            </span>
-          </div> */}
 
         <Button
           variant="dark"
