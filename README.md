@@ -24,7 +24,7 @@ To get this project set up on your local machine, follow these steps:
 - Type into the Terminal `npx parcel src/index.html`
 - To see the project, open your browser and load `http://localhost:1234`
 
-To see the server-side of this project, please visit: <https://github.com/lts-hmms/movie_api>.
+To see the server-side of this project, please visit: <https://github.com/lts-hmms/movie_api>
 
 <p>A live version of this project can be found here: https://mequal.netlify.app</p>
 
