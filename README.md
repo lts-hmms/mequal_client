@@ -17,11 +17,11 @@ The client-side of a movie-app, build as a single-page application, allows users
 ## Getting Started
 
 To get this project up and running locally npm is needed to be run in order to include all dependencies used for this project.
-To get this project set up on your local machine, follow these steps
+To get this project set up on your local machine, follow these steps:
 
-- Follow these steps to clone the repository: <https://docs.github.com/en/repositories/creating-and-managing-repositories/ cloning-a-repository>
+- Clone the repository this way: <https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository>
 - Into the Terminal: navigate to the projects directory
-- Into the Terminal `npx parcel src/index.html`
+- Type into the Terminal `npx parcel src/index.html`
 - To see the project, open your browser and load `http://localhost:1234`
 
 To see the server-side of this project, please visit: <https://github.com/lts-hmms/movie_api>
