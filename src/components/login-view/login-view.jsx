@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './login-view.scss';
 
 export function LoginView(props) {
   const [username, setUsername] = useState('');
@@ -52,6 +53,22 @@ export function LoginView(props) {
     }
   };
 
+  const handleTestuser = () => {
+    axios
+      .post('https://mequal.herokuapp.com/login', {
+        Username: 'testuser',
+        Password: 'Testuser2023',
+      })
+      // backend sends back token & username, they go to onLoggedIn function
+      .then((response) => {
+        const { data } = response;
+        props.onLoggedIn(data);
+      })
+      .catch(() => {
+        alert('Something went wrong. Please contact the owner of this page.');
+      });
+  };
+
   return (
     <div>
       <div className="Login mt-5">
@@ -62,6 +79,17 @@ export function LoginView(props) {
             <Link to="/register">
               <div className="btn-link justify-content-center">Subscribe</div>
             </Link>
+          </h6>
+          <h6 className="text-center">
+            Just here to look around and don't feel like signing up?
+            <Button
+              variant="link"
+              className="justify-content-center"
+              type="submit"
+              onClick={handleTestuser}
+            >
+              Use Testuser
+            </Button>
           </h6>
         </div>
         <div className="row justify-content-center mt-5">

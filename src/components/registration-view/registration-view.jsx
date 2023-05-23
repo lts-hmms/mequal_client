@@ -112,7 +112,8 @@ export function RegistrationView(props) {
               {passwordErr && <p>{passwordErr}</p>}
 
               <Form.Text className="text-muted">
-                Minimum of eight characters, at least one letter and one number.
+                Minimum of eight characters, at least one letter and one number
+                – no special characters.
               </Form.Text>
             </Form.Group>
             <Form.Group controlId="formEmail">
