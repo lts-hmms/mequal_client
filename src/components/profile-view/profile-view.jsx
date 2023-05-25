@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, Row, Col, Form } from 'react-bootstrap';
 import axios from 'axios';
@@ -14,6 +14,8 @@ export function ProfileView() {
 
   const [emailErr, setEmailErr] = useState('');
   const [passwordErr, setPasswordErr] = useState('');
+
+  const [isDisabled, setIsDisabled] = useState(false);
 
   // validate user input
   const validate = () => {
@@ -85,8 +87,15 @@ export function ProfileView() {
     }
   };
 
+  const isTestuser = user.Username === 'testuser';
+
   return (
     <div className="Profile mt-5">
+      {isTestuser
+        ? alert(
+            "You are logged in as testuser. That's why you cannot change the password of the user."
+          )
+        : null}
       <h1 className="display-1 text-center">Profile</h1>
 
       <div className="row justify-content-center mt-5">
@@ -109,6 +118,7 @@ export function ProfileView() {
                 placeholder="********"
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
+                disabled={isTestuser}
               />
               {passwordErr && <p>{passwordErr}</p>}
               <Form.Text className="text-muted">
