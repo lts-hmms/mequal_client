@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-export function RegistrationView(props) {
+export function RegistrationView() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export function RegistrationView(props) {
       setUsernameErr('Username required');
       isReq = false;
     } else if (username.length < 3) {
-      setUsernameErr('Give me at least 3 characters please');
+      setUsernameErr('Give me at least 5 characters please');
       isReq = false;
     }
     if (!password) {
@@ -77,15 +77,15 @@ export function RegistrationView(props) {
   };
 
   return (
-    <div className="Register mt-5">
-      <h1 className="display-1 text-center">Register</h1>
+    <div className="container Register mt-5 justify-content-center text-center">
+      <h1 className="display-1">Register</h1>
       <div>
-        <h6 className="text-center">
-          You already have an account?
-          <Link to="/">
-            <div className="btn-link justify-content-center">Login</div>
+        <div className="p-2">
+          <div>You already have an account?</div>
+          <Link to="/" className="btn-link">
+            Login
           </Link>
-        </h6>
+        </div>
       </div>
       <div className="row justify-content-center mt-5">
         <Col md={8} lg={6}>
