@@ -1,4 +1,7 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+import thunk from 'redux-thunk';
 import {
   moviesReducer,
   setMovies,
@@ -16,15 +19,28 @@ import {
   deleteFav,
 } from './slices/userSlice';
 
-const store = configureStore({
-  reducer: {
-    movies: moviesReducer,
-    user: userReducer,
-  },
+const persistConfig = {
+  key: 'root',
+  storage,
+};
+
+const rootReducer = combineReducers({
+  movies: moviesReducer,
+  user: userReducer,
 });
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: [thunk],
+});
+
+const persistor = persistStore(store);
 
 export {
   store,
+  persistor,
   setMovies,
   changeSearch,
   setGenres,
