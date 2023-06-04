@@ -15,7 +15,17 @@ export function ProfileView() {
   const [emailErr, setEmailErr] = useState('');
   const [passwordErr, setPasswordErr] = useState('');
 
-  const [isDisabled, setIsDisabled] = useState(false);
+  const isTestuser = user.Username === 'testuser';
+
+  useEffect(
+    () =>
+      isTestuser
+        ? alert(
+            'You are logged in as Testuser. Therefore you cannot change the password or delete the user profile.'
+          )
+        : undefined,
+    [isTestuser]
+  );
 
   // validate user input
   const validate = () => {
@@ -38,7 +48,7 @@ export function ProfileView() {
     e.preventDefault();
     const token = localStorage.getItem('token');
     if (user.Username && token) {
-      const warningAlert = confirm(
+      const warningAlert = window.confirm(
         'Are you sure you want to permanently delete your account?'
       );
       if (!warningAlert) return;
@@ -87,15 +97,8 @@ export function ProfileView() {
     }
   };
 
-  const isTestuser = user.Username === 'testuser';
-
   return (
     <div className="Profile mt-5">
-      {isTestuser
-        ? alert(
-            "You are logged in as testuser. That's why you cannot change the password of the user."
-          )
-        : null}
       <h1 className="display-1 text-center">Profile</h1>
 
       <div className="row justify-content-center mt-5">
@@ -147,11 +150,16 @@ export function ProfileView() {
           </Form>
         </Col>
         <Row className="mt-5">
-          <Col
-            className="h6 text-center btn-link justify-content-center"
-            onClick={deleteProfile}
-          >
-            Delete profile
+          <Col className="text-center">
+            <Button
+              variant="link"
+              className="h6 btn-link "
+              type="submit"
+              onClick={deleteProfile}
+              disabled={isTestuser}
+            >
+              Delete profile
+            </Button>
           </Col>
         </Row>
       </div>
