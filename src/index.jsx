@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { MainView } from './components/main-view/main-view';
 import { store } from './store';
-import './index.scss';
 
 const container = document.getElementById('app-container');
 const root = createRoot(container);
