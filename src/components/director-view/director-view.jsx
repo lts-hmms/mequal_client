@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function DirectorView() {
-  const movies = useSelector((state) => state.movies.moviesList);
   const directors = useSelector((state) => state.movies.directorList);
   const navigate = useNavigate();
 

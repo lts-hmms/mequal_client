@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export function GenreView() {
-  const movies = useSelector((state) => state.movies.moviesList);
   const genres = useSelector((state) => state.movies.genreList);
   const navigate = useNavigate();
 
