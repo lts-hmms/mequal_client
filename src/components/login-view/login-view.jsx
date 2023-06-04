@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import './login-view.scss';
 
 export function LoginView(props) {
   const [username, setUsername] = useState('');
@@ -65,70 +64,68 @@ export function LoginView(props) {
         props.onLoggedIn(data);
       })
       .catch(() => {
-        alert('Something went wrong. Please contact the owner of this page.');
+        alert('Something went wrong. Please contact the admin.');
       });
   };
 
   return (
-    <div>
-      <div className="Login mt-5">
-        <h1 className="display-1 text-center">Login</h1>
-        <div>
-          <h6 className="text-center">
-            Not yet registered?
-            <Link to="/register">
-              <div className="btn-link justify-content-center">Subscribe</div>
-            </Link>
-          </h6>
-          <h6 className="text-center">
-            Just here to look around and don't feel like signing up?
-            <Button
-              variant="link"
-              className="justify-content-center"
-              type="submit"
-              onClick={handleTestuser}
-            >
-              Use Testuser
-            </Button>
-          </h6>
+    <div className="container Login mt-5 justify-content-center text-center">
+      <h1 className="display-1">Login</h1>
+      <div>
+        <div className="p-2">
+          <div>Not yet registered?</div>
+          <Link to="/register" className="btn-link">
+            Subscribe
+          </Link>
         </div>
-        <div className="row justify-content-center mt-5">
-          <Col md={8} lg={6}>
-            <Form>
-              <Form.Group controlId="formUsername">
-                <Form.Label />
-                <Form.Control
-                  type="text"
-                  placeholder="Enter username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                />
-                {/* display validation error */}
-                {usernameErr && <p>{usernameErr}</p>}
-              </Form.Group>
-              <Form.Group controlId="formPassword">
-                <Form.Label />
-                <Form.Control
-                  type="password"
-                  placeholder="Enter password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                {passwordErr && <p>{passwordErr}</p>}
-              </Form.Group>
-              <Col>
-                <Button
-                  className="btn mt-3"
-                  variant="dark"
-                  type="submit"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
-              </Col>
-            </Form>
-          </Col>
+        <div className="p-2">
+          <div>Just here to look around and don't feel like signing up?</div>
+          <Button
+            className="p-0"
+            variant="link"
+            type="submit"
+            onClick={handleTestuser}
+          >
+            Login with Testuser
+          </Button>
         </div>
+      </div>
+      <div className="row justify-content-center mt-5">
+        <Col md={8} lg={6}>
+          <Form>
+            <Form.Group controlId="formUsername">
+              <Form.Label />
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              {/* display validation error */}
+              {usernameErr && <p>{usernameErr}</p>}
+            </Form.Group>
+            <Form.Group controlId="formPassword">
+              <Form.Label />
+              <Form.Control
+                type="password"
+                placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {passwordErr && <p>{passwordErr}</p>}
+            </Form.Group>
+            <Col>
+              <Button
+                className="btn mt-3"
+                variant="dark"
+                type="submit"
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
+            </Col>
+          </Form>
+        </Col>
       </div>
     </div>
   );

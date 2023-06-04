@@ -43,14 +43,6 @@ export function MovieView() {
             ))}
           </span>
         </div>
-        <div className="movie-actors">
-          <span className="label">Actors: </span>
-          {movie.Actors.map(({ Name }) => (
-            <span key={Name}>
-              <Link to={`/actors/${Name}`}>{Name}</Link>,{' '}
-            </span>
-          ))}
-        </div>
         <Button
           variant="dark"
           className="btn mt-3"
@@ -60,10 +52,10 @@ export function MovieView() {
         </Button>
       </Col>
       <Col md={4}>
-        <div className="movie-poster mt-5">
+        <div className="movie-poster mt-5 mb-5">
           <img
             alt="movie poster"
-            style={{ width: '125%' }}
+            style={{ width: '100%' }}
             src={movie.ImageUrl}
           />
         </div>

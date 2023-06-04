@@ -20,12 +20,12 @@ export const MoviesList = () => {
 
   return (
     <>
-      <Col md={12} style={{ margin: '1em' }}>
+      <Col className="mt-4 col-md-12">
         <VisibilityFilterInput />
       </Col>
       {filteredMovies.map((m) => (
         <Col md={4} key={m._id}>
-          <div className="movie-cards mt-5">
+          <div className="movie-cards mt-5 mb-5">
             <MovieCard movie={m} />
           </div>
         </Col>
