@@ -16,6 +16,7 @@ export function VisibilityFilterInput() {
       onChange={handleSearchTermChange}
       value={searchTerm}
       placeholder="search"
+      id="search-bar"
     />
   );
 }
