@@ -1,62 +1,47 @@
 import React, { useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 export function LoginView(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // hook for each input
   const [usernameErr, setUsernameErr] = useState('');
   const [passwordErr, setPasswordErr] = useState('');
 
   // validate user inputs
   const validate = () => {
-    let isReq = true;
-    if (!username) {
-      setUsernameErr('Username required');
-      isReq = false;
-    } else if (username.length < 3) {
-      setUsernameErr('Username has at least 3 characters');
-      isReq = false;
+    let isValid = true;
+    if (!username || username.length < 5) {
+      setUsernameErr('Username must be at least 5 characters');
+      isValid = false;
     }
-    if (!password) {
-      setPasswordErr('Password required');
-      isReq = false;
-    } else if (password.length < 6) {
-      setPasswordErr('Password has at least 6 characters');
-      isReq = false;
+    if (!password || password.length < 8) {
+      setPasswordErr('Password must be at least 8 characters');
+      isValid = false;
     }
-    return isReq;
+    return isValid;
   };
 
   // post request to login endpoint of API using Axios
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isReq = validate();
-    if (isReq) {
-      /* Send a request to the server for authentication */
-      axios
-        .post('https://mequal.herokuapp.com/login', {
-          Username: username,
-          Password: password,
-        })
-        // backend sends back token & username, they go to onLoggedIn function
-        .then((response) => {
-          const { data } = response;
-          props.onLoggedIn(data);
-        })
-        .catch(() => {
-          alert('Username or Password is incorrect. Please try again.');
-        });
+    setUsernameErr('');
+    setPasswordErr('');
+    if (validate()) {
+      login(username, password);
     }
   };
 
   const handleTestuser = () => {
+    login('testuser', 'Testuser2023');
+  };
+
+  const login = (username, password) => {
     axios
       .post('https://mequal.herokuapp.com/login', {
-        Username: 'testuser',
-        Password: 'Testuser2023',
+        Username: username,
+        Password: password,
       })
       // backend sends back token & username, they go to onLoggedIn function
       .then((response) => {
@@ -64,7 +49,7 @@ export function LoginView(props) {
         props.onLoggedIn(data);
       })
       .catch(() => {
-        alert('Something went wrong. Please contact the admin.');
+        setUsernameErr('Username or Password is incorrect. Please try again.');
       });
   };
 
@@ -102,7 +87,7 @@ export function LoginView(props) {
                 onChange={(e) => setUsername(e.target.value)}
               />
               {/* display validation error */}
-              {usernameErr && <p>{usernameErr}</p>}
+              {usernameErr && <Alert variant="danger">{usernameErr}</Alert>}
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label />
@@ -112,7 +97,7 @@ export function LoginView(props) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {passwordErr && <p>{passwordErr}</p>}
+              {passwordErr && <Alert variant="danger">{passwordErr}</Alert>}
             </Form.Group>
             <Col>
               <Button
