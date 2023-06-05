@@ -41,7 +41,7 @@ export function MainView() {
     dispatch(setUser(authData.user));
   };
 
-  const getMovies = (token) => {
+  const getMovies = () => {
     axios
       .get('https://mequal.herokuapp.com/movies', {
         headers: { Authorization: `Bearer ${token}` },
@@ -54,15 +54,7 @@ export function MainView() {
       });
   };
 
-  useEffect(() => {
-    if (token !== null) {
-      getMovies(token);
-      getDirectors(token);
-      getGenres(token);
-    }
-  }, [token]);
-
-  const getGenres = (token) => {
+  const getGenres = () => {
     axios
       .get('https://mequal.herokuapp.com/genres/', {
         headers: { Authorization: `Bearer ${token}` },
@@ -75,7 +67,7 @@ export function MainView() {
       });
   };
 
-  const getDirectors = (token) => {
+  const getDirectors = () => {
     axios
       .get('https://mequal.herokuapp.com/directors/', {
         headers: { Authorization: `Bearer ${token}` },
@@ -88,6 +80,14 @@ export function MainView() {
       });
   };
 
+  useEffect(() => {
+    if (token !== null) {
+      getMovies(token);
+      getDirectors(token);
+      getGenres(token);
+    }
+  }, [token]);
+
   return (
     <Router>
       <NavbarView />
@@ -97,71 +97,43 @@ export function MainView() {
             <Route
               path="/"
               element={
-                <>
-                  {
-                    !user.Username ? (
-                      <Col>
-                        <LoginView
-                          onLoggedIn={(authResponse) =>
-                            onLoggedIn(authResponse)
-                          }
-                        />
-                      </Col>
-                    ) : (
-                      <MoviesList />
-                    )
-
-                    // if (movies.length === 0) return <div className="main-view" />;
-                    // return ;
-                  }
-                </>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
+                ) : (
+                  <MoviesList />
+                )
               }
             />
-            {/* Favorites */}
             <Route
-              path="/users/:username/favs/"
+              path="/users/:username/favs"
               element={
-                !user.Username ? (
-                  <Col>
-                    <LoginView
-                      onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
-                    />
-                  </Col>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
                 ) : (
-                  <Col>
-                    <FavsView />
-                  </Col>
+                  <FavsView />
                 )
               }
             />
             {/* registration */}
             <Route
               path="/register"
-              element={
-                user.Username ? (
-                  <Navigate to="/" />
-                ) : (
-                  <Col>
-                    <RegistrationView />
-                  </Col>
-                )
-              }
+              element={username ? <Navigate to="/" /> : <RegistrationView />}
             />
             {/* profile */}
             <Route
               path="/users/:username/profile"
               element={
-                !user.Username ? (
-                  <Col>
-                    <LoginView
-                      onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
-                    />
-                  </Col>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
                 ) : (
                   <Container>
-                    <Col>
-                      <ProfileView />
-                    </Col>
+                    <ProfileView />
                   </Container>
                 )
               }
@@ -170,14 +142,11 @@ export function MainView() {
             <Route
               path="/movies/:movieId"
               element={
-                !user.Username ? (
-                  <Col>
-                    <LoginView
-                      onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
-                    />
-                  </Col>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
                 ) : (
-                  // if (movies.length === 0) return <div className="main-view" />;
                   <MovieView />
                 )
               }
@@ -186,14 +155,11 @@ export function MainView() {
             <Route
               path="/directors/:directorName"
               element={
-                !user.Username ? (
-                  <Col>
-                    <LoginView
-                      onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
-                    />
-                  </Col>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
                 ) : (
-                  // if (movies.length === 0) return <div className="main-view" />;
                   <Col md={8}>
                     <DirectorView />
                   </Col>
@@ -204,14 +170,11 @@ export function MainView() {
             <Route
               path="/genres/:genreName"
               element={
-                !user.Username ? (
-                  <Col>
-                    <LoginView
-                      onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
-                    />
-                  </Col>
+                !username ? (
+                  <LoginView
+                    onLoggedIn={(authResponse) => onLoggedIn(authResponse)}
+                  />
                 ) : (
-                  // if (movies.length === 0) return <div className="main-view" />;
                   <Col md={8}>
                     <GenreView />
                   </Col>
