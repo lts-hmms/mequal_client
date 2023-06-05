@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+import { Form, Button, Col, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -16,39 +16,29 @@ export function RegistrationView() {
 
   // validate user inputs
   const validate = () => {
-    let isReq = true;
-    if (!username) {
-      setUsernameErr('Username required');
-      isReq = false;
-    } else if (username.length < 3) {
-      setUsernameErr('Give me at least 5 characters please');
-      isReq = false;
+    let isValid = true;
+    if (!username || username.length < 5) {
+      setUsernameErr('Username must be at least 5 characters');
+      isValid = false;
     }
-    if (!password) {
-      setPasswordErr('Password required');
-      isReq = false;
-    } else if (password.length < 8) {
-      setPasswordErr('Give me at least 8 characters please');
-      isReq = false;
+    if (!password || password.length < 8) {
+      setPasswordErr('Password must be at least 8 characters');
+      isValid = false;
     }
-    if (!email) {
-      setEmailErr('Email required');
-      isReq = false;
-    } else if (email.indexOf('@') === -1 || email.indexOf('.') === -1) {
-      setEmailErr("This doesn't look like an email ");
-      isReq = false;
+    if (!email || email.indexOf('@') === -1 || email.indexOf('.') === -1) {
+      setEmailErr('Please enter a valid email');
+      isValid = false;
     }
     if (!birthday) {
       setBirthdayErr('Birthday required');
-      isReq = false;
+      isValid = false;
     }
-    return isReq;
+    return isValid;
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const isReq = validate();
-    if (isReq) {
+    if (validate()) {
       /* send a post request to the server */
       try {
         const response = await axios.post(
@@ -65,12 +55,10 @@ export function RegistrationView() {
         );
         window.open('/', '_self');
       } catch (e) {
-        if (e.response.status === 400) {
-          alert(`I am sorry but this went wrong: ${e.response.data}`);
+        if (e.response && e.response.status === 400) {
+          alert(`An error occured: ${e.response.data}`);
         } else {
-          alert(
-            `I am sorry but this went wrong: Please check if you meet the requirements.`
-          );
+          alert(`An error occured: Please check if you meet the requirements.`);
         }
       }
     }
@@ -98,7 +86,7 @@ export function RegistrationView() {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
-              {usernameErr && <p>{usernameErr}</p>}
+              {usernameErr && <Alert variant="danger">{usernameErr}</Alert>}
             </Form.Group>
             <Form.Group controlId="formPassword">
               <Form.Label />
@@ -109,7 +97,7 @@ export function RegistrationView() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {passwordErr && <p>{passwordErr}</p>}
+              {passwordErr && <Alert variant="danger">{passwordErr}</Alert>}
 
               <Form.Text className="text-muted">
                 Minimum of eight characters, at least one letter and one number
@@ -124,7 +112,7 @@ export function RegistrationView() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {emailErr && <p>{emailErr}</p>}
+              {emailErr && <Alert variant="danger">{emailErr}</Alert>}
             </Form.Group>
             <Form.Group controlId="formBirthday">
               <Form.Label />
@@ -134,7 +122,7 @@ export function RegistrationView() {
                 value={birthday}
                 onChange={(e) => setBirthday(e.target.value)}
               />
-              {birthdayErr && <p>{birthdayErr}</p>}
+              {birthdayErr && <Alert variant="danger">{birthdayErr}</Alert>}
             </Form.Group>
             <Col>
               <Button
