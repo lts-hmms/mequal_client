@@ -13,9 +13,8 @@ export function FavsView() {
         <h1 className="display-1">Your Favs</h1>
         <h2>💜</h2>
       </div>
-
-      {user.Favslist?.map((m) => {
-        const res = movies.filter((movie) => movie._id === m);
+      {user.Favslist?.map((favMovieId) => {
+        const res = movies.filter((movie) => movie._id === favMovieId);
         if (res.length > 0) {
           return res.map((m) => (
             <Col md={4} key={m._id}>
@@ -25,6 +24,7 @@ export function FavsView() {
             </Col>
           ));
         }
+        return null;
       })}
     </div>
   );
