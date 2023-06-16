@@ -11,7 +11,7 @@ export function MovieView() {
   const navigate = useNavigate();
 
   return (
-    <Row>
+    <>
       <Col md={8} className="movietext sm-12 my-auto">
         <h2 className="movie-title mt-5">
           <span className="value">{movie.Title}</span>
@@ -60,6 +60,6 @@ export function MovieView() {
           />
         </div>
       </Col>
-    </Row>
+    </>
   );
 }
